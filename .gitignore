@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environment
+.venv
+
+# Genererede CV-filer (bygges fra cv.toml)
+output/
+
+# Browser-preview kopi af CSS
+static/cv.css
+
+# Det originale Jobindex-CV (ikke del af kildekoden)
+cv-kristian-nygaard-jensen.pdf

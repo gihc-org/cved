@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV Editor – {{ cv.personal.name }}</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #dee2e6;
+      --accent: #3498db;
+      --accent-dark: #2980b9;
+      --danger: #e74c3c;
+      --text: #2c3e50;
+      --muted: #6c757d;
+      --sidebar-w: 260px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+    /* Layout */
+    .layout { display: flex; min-height: 100vh; }
+    .sidenav {
+      width: var(--sidebar-w);
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .sidenav h2 { font-size: 14px; padding: 0 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin: 0 0 8px; }
+    .sidenav a {
+      display: block;
+      padding: 9px 20px;
+      color: #bdc3c7;
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+    }
+    .sidenav a:hover, .sidenav a.active { color: #fff; background: rgba(255,255,255,0.05); border-left-color: var(--accent); }
+
+    .content { flex: 1; padding: 30px 40px; max-width: 900px; }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border);
+    }
+    .topbar h1 { margin: 0; font-size: 22px; }
+    .btn-group { display: flex; gap: 10px; }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;
+      font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 6px; transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-success { background: #27ae60; color: white; }
+    .btn-danger { background: var(--danger); color: white; font-size: 11px; padding: 4px 10px; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); }
+
+    /* Cards / sections */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card h2 { margin: 0 0 18px; font-size: 16px; color: var(--accent); }
+
+    /* Form */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* Dynamic entries */
+    .entry-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 16px;
+      background: #fafbfc;
+    }
+    .entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .entry-header strong { font-size: 14px; }
+
+    /* Bullets */
+    .bullet-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .bullet-row { display: flex; gap: 8px; align-items: center; }
+    .bullet-row input { flex: 1; }
+    .subsection-block { margin-top: 12px; padding: 12px; background: #f0f4f8; border-radius: 6px; border: 1px dashed #c5cdd7; }
+    .subsection-block label { font-size: 11px; }
+
+    /* Skills */
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .skill-tag {
+      background: #e8f4fd; color: #1a5276; border: 1px solid #aed6f1;
+      border-radius: 20px; padding: 4px 12px; font-size: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .skill-tag button { background: none; border: none; cursor: pointer; color: #e74c3c; font-size: 14px; padding: 0; line-height: 1; }
+    .skill-input-row { display: flex; gap: 8px; }
+    .skill-input-row input { flex: 1; }
+
+    /* Lang */
+    .lang-row { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+    .lang-row input[type="text"] { width: 140px; }
+    .lang-row select { width: 80px; }
+
+    /* Download bar */
+    .download-bar {
+      position: fixed; bottom: 0; left: var(--sidebar-w); right: 0;
+      background: #2c3e50; padding: 12px 40px;
+      display: flex; gap: 12px; align-items: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+    }
+    .download-bar span { color: #bdc3c7; font-size: 13px; margin-right: 8px; }
+    .content { padding-bottom: 80px; }
+
+    /* Flash */
+    .flash { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+    .flash-success { background: #d5f5e3; color: #1e8449; border: 1px solid #a9dfbf; }
+    .flash-error { background: #fadbd8; color: #922b21; border: 1px solid #f1948a; }
+
+    /* Preview link */
+    .preview-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* Collapsible entries */
+    .entry-toggle { cursor: pointer; user-select: none; }
+    .entry-body { }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidenav -->
+  <nav class="sidenav">
+    <h2>CV Editor</h2>
+    <a href="#personal">Personlig info</a>
+    <a href="#summary">Profiltekst</a>
+    <a href="#about">Om mig</a>
+    <a href="#languages">Sprog</a>
+    <a href="#skills">Kompetencer</a>
+    <a href="#experience">Joberfaring</a>
+    <a href="#education">Uddannelse</a>
+  </nav>
+
+  <!-- Main content -->
+  <div class="content">
+
+    <div class="topbar">
+      <h1>✏️ Rediger CV</h1>
+      <div class="btn-group">
+        <a href="/preview" target="_blank" class="btn btn-outline">👁 Preview</a>
+        <button form="cv-form" type="submit" class="btn btn-primary">💾 Gem</button>
+      </div>
+    </div>
+
+    {% if flash %}
+    <div class="flash flash-{{ flash.type }}">{{ flash.message }}</div>
+    {% endif %}
+
+    <form id="cv-form" method="POST" action="/save">
+
+      <!-- Personal -->
+      <div class="card" id="personal">
+        <h2>Personlig information</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Navn</label>
+            <input type="text" name="personal_name" value="{{ cv.personal.name }}">
+          </div>
+          <div class="form-group">
+            <label>Titel</label>
+            <input type="text" name="personal_title" value="{{ cv.personal.title }}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" name="personal_email" value="{{ cv.personal.email }}">
+          </div>
+          <div class="form-group">
+            <label>Telefon</label>
+            <input type="tel" name="personal_phone" value="{{ cv.personal.phone }}">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Adresse</label>
+            <input type="text" name="personal_address" value="{{ cv.personal.address }}">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Profilbillede (sti, fx static/photo.jpg)</label>
+            <input type="text" name="personal_photo" value="{{ cv.personal.photo }}">
+            <span class="preview-hint">Læg billedet i mappen <code>static/</code> og angiv filnavnet her</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="card" id="summary">
+        <h2>Profiltekst</h2>
+        <div class="form-group">
+          <label>Sammenfatning / faglig profil</label>
+          <textarea name="summary_text" rows="6">{{ cv.summary.text.strip() }}</textarea>
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="card" id="about">
+        <h2>Om mig</h2>
+        <div class="form-group">
+          <label>Personlig tekst (vises i sidebar)</label>
+          <textarea name="about_text" rows="4">{{ cv.about.text.strip() }}</textarea>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="card" id="languages">
+        <h2>Sprog</h2>
+        <div id="lang-list">
+          {% for lang in cv.languages %}
+          <div class="lang-row">
+            <input type="text" name="lang_name" value="{{ lang.name }}" placeholder="Sprog">
+            <select name="lang_level">
+              {% for i in range(1, 5) %}
+              <option value="{{ i }}" {% if lang.level == i %}selected{% endif %}>{{ i }}/4</option>
+              {% endfor %}
+            </select>
+            <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">✕</button>
+          </div>
+          {% endfor %}
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="addLang()">+ Tilføj sprog</button>
+      </div>
+
+      <!-- Skills -->
+      <div class="card" id="skills">
+        <h2>Kompetencer</h2>
+        <div class="skill-tags" id="skill-tags">
+          {% for skill in cv.skills.tags %}
+          <div class="skill-tag">
+            <input type="hidden" name="skill" value="{{ skill }}">
+            <span>{{ skill }}</span>
+            <button type="button" onclick="this.parentElement.remove()">✕</button>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="skill-input-row">
+          <input type="text" id="new-skill" placeholder="Ny kompetence..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill();}">
+          <button type="button" class="btn btn-outline btn-sm" onclick="addSkill()">Tilføj</button>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="card" id="experience">
+        <h2>Joberfaring</h2>
+        <div id="exp-list">
+          {% for job in cv.experience %}
+          <div class="entry-card">
+            <div class="entry-header">
+              <strong class="entry-toggle">{{ job.company }} – {{ job.title }}</strong>
+              <button type="button" class="btn btn-danger" onclick="this.closest('.entry-card').remove()">Slet</button>
+            </div>
+            <div class="entry-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Virksomhed</label>
+                  <input type="text" name="exp_company" value="{{ job.company }}">
+                </div>
+                <div class="form-group">
+                  <label>Varighed</label>
+                  <input type="text" name="exp_duration" value="{{ job.duration }}">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Titel</label>
+                  <input type="text" name="exp_title" value="{{ job.title }}">
+                </div>
+                <div class="form-group">
+                  <label>Periode</label>
+                  <input type="text" name="exp_period" value="{{ job.period }}">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Type (fx Konsulent)</label>
+                  <input type="text" name="exp_type" value="{{ job.type | default('') }}">
+                </div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Beskrivelse</label>
+                  <input type="text" name="exp_description" value="{{ job.description | default('') }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Punkter</label>
+                <div class="bullet-list" data-name="exp_bullets">
+                  {% for b in job.bullets | default([]) %}
+                  <div class="bullet-row">
+                    <input type="text" name="exp_bullets" value="{{ b }}">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✕</button>
+                  </div>
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="addBullet(this,'exp_bullets')">+ Punkt</button>
+              </div>
+
+              <!-- Subsections -->
+              <div class="form-group" style="margin-top:12px">
+                <label>Underafsnit</label>
+                <div class="subsection-list">
+                  {% for sub in job.subsections | default([]) %}
+                  <div class="subsection-block">
+                    <div class="form-group" style="margin-bottom:8px">
+                      <label>Overskrift</label>
+                      <input type="text" name="exp_sub_heading" value="{{ sub.heading }}">
+                    </div>
+                    <div class="form-group">
+                      <label>Punkter</label>
+                      <div class="bullet-list">
+                        {% for b in sub.bullets %}
+                        <div class="bullet-row">
+                          <input type="text" name="exp_sub_bullet" value="{{ b }}">
+                          <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✕</button>
+                        </div>
+                        {% endfor %}
+                      </div>
+                      <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="addBullet(this,'exp_sub_bullet')">+ Punkt</button>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" style="margin-top:8px" onclick="this.closest('.subsection-block').remove()">Slet underafsnit</button>
+                  </div>
+                  {% endfor %}
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" style="margin-top:8px" onclick="addSubsection(this)">+ Underafsnit</button>
+              </div>
+
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button type="button" class="btn btn-outline" onclick="addExperience()">+ Tilføj job</button>
+      </div>
+
+      <!-- Education -->
+      <div class="card" id="education">
+        <h2>Uddannelse</h2>
+        <div id="edu-list">
+          {% for edu in cv.education %}
+          <div class="entry-card">
+            <div class="entry-header">
+              <strong>{{ edu.institution }} – {{ edu.degree }}</strong>
+              <button type="button" class="btn btn-danger" onclick="this.closest('.entry-card').remove()">Slet</button>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Institution</label>
+                <input type="text" name="edu_institution" value="{{ edu.institution }}">
+              </div>
+              <div class="form-group">
+                <label>Varighed</label>
+                <input type="text" name="edu_duration" value="{{ edu.duration }}">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Grad / titel</label>
+                <input type="text" name="edu_degree" value="{{ edu.degree }}">
+              </div>
+              <div class="form-group">
+                <label>Periode</label>
+                <input type="text" name="edu_period" value="{{ edu.period }}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Punkter</label>
+              <div class="bullet-list">
+                {% for b in edu.bullets | default([]) %}
+                <div class="bullet-row">
+                  <input type="text" name="edu_bullets" value="{{ b }}">
+                  <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✕</button>
+                </div>
+                {% endfor %}
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="addBullet(this,'edu_bullets')">+ Punkt</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button type="button" class="btn btn-outline" onclick="addEducation()">+ Tilføj uddannelse</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- Download bar -->
+<div class="download-bar">
+  <span>Download:</span>
+  <a href="/download/pdf" class="btn btn-primary btn-sm">📄 PDF</a>
+  <a href="/download/docx" class="btn btn-secondary btn-sm">📝 DOCX</a>
+  <a href="/download/odf" class="btn btn-secondary btn-sm">📋 ODF</a>
+  <a href="/preview" target="_blank" class="btn btn-outline btn-sm" style="color:#bdc3c7;border-color:#bdc3c7">👁 Preview</a>
+</div>
+
+<script>
+function addLang() {
+  const div = document.createElement('div');
+  div.className = 'lang-row';
+  div.innerHTML = `
+    <input type="text" name="lang_name" placeholder="Sprog">
+    <select name="lang_level">
+      <option value="1">1/4</option><option value="2">2/4</option>
+      <option value="3">3/4</option><option value="4" selected>4/4</option>
+    </select>
+    <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">✕</button>
+  `;
+  document.getElementById('lang-list').appendChild(div);
+}
+
+function addSkill() {
+  const inp = document.getElementById('new-skill');
+  const val = inp.value.trim();
+  if (!val) return;
+  const div = document.createElement('div');
+  div.className = 'skill-tag';
+  div.innerHTML = `<input type="hidden" name="skill" value="${val}"><span>${val}</span><button type="button" onclick="this.parentElement.remove()">✕</button>`;
+  document.getElementById('skill-tags').appendChild(div);
+  inp.value = '';
+}
+
+function addBullet(btn, name) {
+  const list = btn.previousElementSibling;
+  const row = document.createElement('div');
+  row.className = 'bullet-row';
+  row.innerHTML = `<input type="text" name="${name}" placeholder="Punkt..."><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(row);
+}
+
+function addSubsection(btn) {
+  const list = btn.previousElementSibling;
+  const block = document.createElement('div');
+  block.className = 'subsection-block';
+  block.innerHTML = `
+    <div class="form-group" style="margin-bottom:8px">
+      <label>Overskrift</label>
+      <input type="text" name="exp_sub_heading" placeholder="Fx Konsulent hos X">
+    </div>
+    <div class="form-group">
+      <label>Punkter</label>
+      <div class="bullet-list"></div>
+      <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="addBullet(this,'exp_sub_bullet')">+ Punkt</button>
+    </div>
+    <button type="button" class="btn btn-danger btn-sm" style="margin-top:8px" onclick="this.closest('.subsection-block').remove()">Slet underafsnit</button>
+  `;
+  list.appendChild(block);
+}
+
+function addExperience() {
+  const card = document.createElement('div');
+  card.className = 'entry-card';
+  card.innerHTML = `
+    <div class="entry-header">
+      <strong>Nyt job</strong>
+      <button type="button" class="btn btn-danger" onclick="this.closest('.entry-card').remove()">Slet</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Virksomhed</label><input type="text" name="exp_company" placeholder="Virksomhed"></div>
+      <div class="form-group"><label>Varighed</label><input type="text" name="exp_duration" placeholder="fx 1 år, 3 måneder"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Titel</label><input type="text" name="exp_title" placeholder="Jobtitel"></div>
+      <div class="form-group"><label>Periode</label><input type="text" name="exp_period" placeholder="jan. 2023 – nu"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Type</label><input type="text" name="exp_type" placeholder="fx Konsulent"></div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group"><label>Beskrivelse</label><input type="text" name="exp_description" placeholder="Kort beskrivelse..."></div>
+    </div>
+    <div class="form-group">
+      <label>Punkter</label>
+      <div class="bullet-list" data-name="exp_bullets"></div>
+      <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="addBullet(this,'exp_bullets')">+ Punkt</button>
+    </div>
+    <div class="form-group" style="margin-top:12px">
+      <label>Underafsnit</label>
+      <div class="subsection-list"></div>
+      <button type="button" class="btn btn-outline btn-sm" style="margin-top:8px" onclick="addSubsection(this)">+ Underafsnit</button>
+    </div>
+  `;
+  document.getElementById('exp-list').appendChild(card);
+}
+
+function addEducation() {
+  const card = document.createElement('div');
+  card.className = 'entry-card';
+  card.innerHTML = `
+    <div class="entry-header">
+      <strong>Ny uddannelse</strong>
+      <button type="button" class="btn btn-danger" onclick="this.closest('.entry-card').remove()">Slet</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Institution</label><input type="text" name="edu_institution" placeholder="Institution"></div>
+      <div class="form-group"><label>Varighed</label><input type="text" name="edu_duration" placeholder="fx 2 år"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Grad / titel</label><input type="text" name="edu_degree" placeholder="Uddannelsestitel"></div>
+      <div class="form-group"><label>Periode</label><input type="text" name="edu_period" placeholder="2000 – 2002"></div>
+    </div>
+    <div class="form-group">
+      <label>Punkter</label>
+      <div class="bullet-list"></div>
+      <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="addBullet(this,'edu_bullets')">+ Punkt</button>
+    </div>
+  `;
+  document.getElementById('edu-list').appendChild(card);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ cv.personal.name }} – CV</title>
+  <link rel="stylesheet" href="{{ css_url | default('cv.css') }}">
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+
+    <div class="photo-wrapper">
+      {% if cv.personal.photo %}
+        <img class="photo" src="{{ cv.personal.photo }}" alt="{{ cv.personal.name }}">
+      {% else %}
+        <div class="photo-placeholder">
+          {{ cv.personal.name[0] }}{{ cv.personal.name.split()[-1][0] }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="sidebar-name">{{ cv.personal.name }}</div>
+    <div class="sidebar-title">{{ cv.personal.title }}</div>
+
+    <!-- Contact -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Kontakt</div>
+      <div class="contact-item"><span class="icon">✉</span> {{ cv.personal.email }}</div>
+      <div class="contact-item"><span class="icon">☎</span> {{ cv.personal.phone }}</div>
+      <div class="contact-item"><span class="icon">⌂</span> {{ cv.personal.address }}</div>
+    </div>
+
+    <!-- Languages -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Sprog</div>
+      {% for lang in cv.languages %}
+      <div class="lang-row">
+        <span class="lang-name">{{ lang.name }}</span>
+        <span class="dots">
+          {% for i in range(4) %}
+            <span class="dot {% if i < lang.level %}filled{% endif %}"></span>
+          {% endfor %}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Skills -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Kompetencer</div>
+      <div class="skills-grid">
+        {% for skill in cv.skills.tags %}
+          <span class="skill-tag">{{ skill }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Om mig</div>
+      <p class="about-text">{{ cv.about.text.strip() }}</p>
+    </div>
+
+  </aside>
+
+  <!-- ── Main content ── -->
+  <main class="main">
+
+    <div class="main-header">
+      <div class="main-title">{{ cv.personal.title }}</div>
+      <p class="summary-text">{{ cv.summary.text.strip() }}</p>
+    </div>
+
+    <!-- Experience -->
+    <div class="section">
+      <div class="section-title">Joberfaring</div>
+      <div class="timeline">
+        {% for job in cv.experience %}
+        <div class="timeline-entry">
+          <div class="entry-company">{{ job.company }} ({{ job.duration }})</div>
+          <div class="entry-title">{{ job.title }}</div>
+          <div class="entry-period">{{ job.period }}</div>
+          {% if job.type %}<div class="entry-type">{{ job.type }}</div>{% endif %}
+          {% if job.description %}<div class="entry-description">{{ job.description }}</div>{% endif %}
+          {% if job.bullets %}
+          <ul class="entry-bullets">
+            {% for b in job.bullets %}<li>{{ b }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+          {% if job.subsections %}
+            {% for sub in job.subsections %}
+              <div class="subsection-heading">{{ sub.heading }}</div>
+              <ul class="entry-bullets">
+                {% for b in sub.bullets %}<li>{{ b }}</li>{% endfor %}
+              </ul>
+            {% endfor %}
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="section">
+      <div class="section-title">Uddannelse</div>
+      <div class="timeline">
+        {% for edu in cv.education %}
+        <div class="timeline-entry">
+          <div class="entry-company">{{ edu.institution }} ({{ edu.duration }})</div>
+          <div class="entry-title">{{ edu.degree }}</div>
+          <div class="entry-period">{{ edu.period }}</div>
+          {% if edu.bullets %}
+          <ul class="entry-bullets">
+            {% for b in edu.bullets %}<li>{{ b }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
