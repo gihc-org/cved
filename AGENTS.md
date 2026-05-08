@@ -6,6 +6,7 @@ This file provides guidance to AI coding agents working in this repository.
 
 @.guidelines/security.md
 @.guidelines/web-frontend.md
+@.guidelines/testing-and-docs.md
 
 ---
 
