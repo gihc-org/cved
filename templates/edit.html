@@ -141,6 +141,15 @@
     .flash-success { background: #d5f5e3; color: #1e8449; border: 1px solid #a9dfbf; }
     .flash-error { background: #fadbd8; color: #922b21; border: 1px solid #f1948a; }
 
+    /* Photo upload */
+    .photo-preview-row { display: flex; gap: 16px; align-items: center; }
+    .photo-preview {
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; border: 2px solid var(--border);
+    }
+    .photo-actions { display: flex; flex-direction: column; gap: 8px; }
+    .remove-photo-label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; cursor: pointer; text-transform: none; letter-spacing: 0; }
+
     /* Preview link */
     .preview-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
@@ -179,7 +188,7 @@
     <div class="flash flash-{{ flash.type }}">{{ flash.message }}</div>
     {% endif %}
 
-    <form id="cv-form" method="POST" action="/save">
+    <form id="cv-form" method="POST" action="/save" enctype="multipart/form-data">
 
       <!-- Personal -->
       <div class="card" id="personal">
@@ -212,9 +221,21 @@
         </div>
         <div class="form-row full">
           <div class="form-group">
-            <label>Profilbillede (sti, fx static/photo.jpg)</label>
-            <input type="text" name="personal_photo" value="{{ cv.personal.photo }}">
-            <span class="preview-hint">Læg billedet i mappen <code>static/</code> og angiv filnavnet her</span>
+            <label>Profilbillede</label>
+            {% if cv.personal.photo %}
+            <div class="photo-preview-row">
+              <img class="photo-preview" src="{{ cv.personal.photo }}" alt="Nuværende profilbillede">
+              <div class="photo-actions">
+                <input type="file" name="personal_photo" accept="image/*" onchange="previewPhoto(this)">
+                <label class="remove-photo-label">
+                  <input type="checkbox" name="remove_photo" value="1"> Fjern billede
+                </label>
+              </div>
+            </div>
+            {% else %}
+            <input type="file" name="personal_photo" accept="image/*" onchange="previewPhoto(this)">
+            <img class="photo-preview" id="photo-preview-new" style="display:none" alt="Preview">
+            {% endif %}
           </div>
         </div>
       </div>
@@ -428,6 +449,21 @@
 </div>
 
 <script>
+function previewPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    let preview = input.parentElement.parentElement.querySelector('.photo-preview');
+    if (!preview) {
+      preview = document.getElementById('photo-preview-new');
+      preview.style.display = 'inline-block';
+    }
+    preview.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function addLang() {
   const div = document.createElement('div');
   div.className = 'lang-row';

@@ -1,7 +1,8 @@
 import tomllib
 import tomli_w
+import uuid
 from pathlib import Path
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from jinja2 import Environment, FileSystemLoader
@@ -73,8 +74,21 @@ async def preview(request: Request):
 async def save(request: Request):
     global _flash
     form = await request.form()
+
+    # Handle photo upload
+    photo_path = ""
+    upload = form.get("personal_photo")
+    if upload is not None and hasattr(upload, "filename") and upload.filename:
+        ext = Path(upload.filename).suffix or ".jpg"
+        safe_name = f"photo_{uuid.uuid4().hex[:8]}{ext}"
+        dest = static_dir / safe_name
+        dest.write_bytes(await upload.read())
+        photo_path = f"static/{safe_name}"
+
     form_dict: dict[str, list[str]] = {}
     for k, v in form.multi_items():
+        if hasattr(v, "filename"):
+            continue  # UploadFile, already handled
         form_dict.setdefault(k, []).append(v)
 
     def first(key: str, default: str = "") -> str:
@@ -85,6 +99,20 @@ async def save(request: Request):
 
     cv: dict = {}
 
+    # Photo: use new upload, or clear if remove requested, or keep existing
+    if photo_path:
+        cv_photo = photo_path
+    elif first("remove_photo"):
+        cv_photo = ""
+        # Clean up old photo file
+        old = load_cv().get("personal", {}).get("photo", "")
+        if old:
+            old_path = BASE / old
+            if old_path.exists():
+                old_path.unlink()
+    else:
+        cv_photo = load_cv().get("personal", {}).get("photo", "")
+
     # Personal
     cv["personal"] = {
         "name": first("personal_name"),
@@ -92,7 +120,7 @@ async def save(request: Request):
         "email": first("personal_email"),
         "phone": first("personal_phone"),
         "address": first("personal_address"),
-        "photo": first("personal_photo"),
+        "photo": cv_photo,
     }
 
     # Summary / About

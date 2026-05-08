@@ -80,6 +80,16 @@ def to_docx(cv: dict) -> Path:
     _set_para_spacing(contact, after=8)
     _add_run(contact, f"{p['email']}  |  {p['phone']}  |  {p['address']}", size=10)
 
+    # Photo
+    if p.get("photo"):
+        photo_file = BASE / p["photo"]
+        if photo_file.exists():
+            photo_para = doc.add_paragraph()
+            photo_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            _set_para_spacing(photo_para, after=6)
+            run = photo_para.add_run()
+            run.add_picture(str(photo_file), width=Cm(2.5))
+
     # Summary
     doc.add_heading("Profil", level=2)
     s = doc.add_paragraph(cv["summary"]["text"].strip())

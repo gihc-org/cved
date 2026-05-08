@@ -1,3 +1,7 @@
+languages = [
+    { name = "Dansk", level = 4 },
+    { name = "Engelsk", level = 3 },
+]
 
 [personal]
 name = "Kristian Nygaard Jensen"
@@ -5,42 +9,48 @@ title = "Systemudvikler"
 email = "kristian.n.jensen@gmail.com"
 phone = "52699443"
 address = "Krudttårnsvej 121, 2791 Dragør"
-photo = ""  # sti til profilbillede, fx "static/photo.jpg"
+photo = "static/photo_df7a3af8.png"
 
 [summary]
-text = """
-Jeg arbejder med DevOps og cloud-baserede løsninger med fokus på stabil drift, sikkerhed og effektiv levering. \
-Med solid erfaring fra AWS og Infrastructure as Code (IaC) har jeg automatiseret og standardiseret infrastruktur \
-for at reducere time-to-market og understøtte agile arbejdsmetoder. Jeg har arbejdet med monitorering, adgangsstyring \
-og drift i miljøer med høje krav til compliance og informationssikkerhed. Samtidig har jeg fokus på at omsætte min \
-cloud-erfaring til Azure-baserede platforme. Jeg motiveres af at skabe løsninger, der forbedrer brugeroplevelsen og \
-styrker IT som en integreret del af forretningen.
-"""
+text = "Jeg arbejder med DevOps og cloud-baserede løsninger med fokus på stabil drift, sikkerhed og effektiv levering. Med solid erfaring fra AWS og Infrastructure as Code (IaC) har jeg automatiseret og standardiseret infrastruktur for at reducere time-to-market og understøtte agile arbejdsmetoder. Jeg har arbejdet med monitorering, adgangsstyring og drift i miljøer med høje krav til compliance og informationssikkerhed. Samtidig har jeg fokus på at omsætte min cloud-erfaring til Azure-baserede platforme. Jeg motiveres af at skabe løsninger, der forbedrer brugeroplevelsen og styrker IT som en integreret del af forretningen."
 
 [about]
-text = """
-Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt \
-humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv \
-- meget gerne kombineret.
-"""
-
-[[languages]]
-name = "Dansk"
-level = 4
-
-[[languages]]
-name = "Engelsk"
-level = 3
+text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
 
 [skills]
 tags = [
-  "Ansible", "Artifactory", "aws cloud", "Azure DevOps", "Bash",
-  "CentOS", "Cerebro", "Clojure", "ClojureScript", "Delphi",
-  "Docker", "Drupal", "fluentd", "gocd", "go test",
-  "HTML + CSS", "JavaScript", "Jenkins", "Kibana", "kubernetes",
-  "Marathon", "Mesos", "MSSQL", "MySQL", "NodeJS",
-  "PHP", "PostgreSQL", "rancher", "SOAP", "SonarQube",
-  "terraform", "Typo3"
+    "Ansible",
+    "Artifactory",
+    "aws cloud",
+    "Azure DevOps",
+    "Bash",
+    "CentOS",
+    "Cerebro",
+    "Clojure",
+    "ClojureScript",
+    "Delphi",
+    "Docker",
+    "Drupal",
+    "fluentd",
+    "gocd",
+    "go test",
+    "HTML + CSS",
+    "JavaScript",
+    "Jenkins",
+    "Kibana",
+    "kubernetes",
+    "Marathon",
+    "Mesos",
+    "MSSQL",
+    "MySQL",
+    "NodeJS",
+    "PHP",
+    "PostgreSQL",
+    "rancher",
+    "SOAP",
+    "SonarQube",
+    "terraform",
+    "Typo3",
 ]
 
 [[experience]]
@@ -50,11 +60,11 @@ title = "DevOps"
 period = "feb. 2023 – jun. 2023"
 type = "Konsulent"
 bullets = [
-  "Implementering af pipelines i Jenkins",
-  "Vedligeholdelse af Jenkins",
-  "Vedligeholdelse af virtuelle maskiner",
-  "Vedligeholde AWX projekter",
-  "Opbygning af docker images",
+    "Implementering af pipelines i Jenkins",
+    "Vedligeholdelse af Jenkins",
+    "Vedligeholdelse af virtuelle maskiner",
+    "Vedligeholde AWX projekter",
+    "Opbygning af docker images",
 ]
 
 [[experience]]
@@ -62,11 +72,10 @@ company = "0071"
 duration = "9 måneder"
 title = "Software Developer"
 period = "maj 2022 – jan. 2023"
-type = ""
 description = "Implementering af publiseringsplatform (Zero Status)."
 bullets = [
-  "Applikation udviklet i Node.js",
-  "Dokumenter gemt på IPFS",
+    "Applikation udviklet i Node.js",
+    "Dokumenter gemt på IPFS",
 ]
 
 [[experience]]
@@ -74,21 +83,24 @@ company = "Cybercom"
 duration = "1 år, 7 måneder"
 title = "DevOps Engineer"
 period = "okt. 2020 – apr. 2022"
-type = ""
 description = "Infrastrukture R&D. Deployment via CDK og terraform."
-subsections = [
-  { heading = "Konsulent hos COOP via Cybercom/KnowIT", bullets = [
+
+[[experience.subsections]]
+heading = "Konsulent hos COOP via Cybercom/KnowIT"
+bullets = [
     "Implementerede logging-infrastruktur",
     "Rancher",
     "Cerebro, Elasticsearch / Kibana, Fluentd",
     "Terraform",
     "Opbygning af docker images",
-  ]},
-  { heading = "Konsulent hos Ørsted via Cybercom/KnowIT", bullets = [
+]
+
+[[experience.subsections]]
+heading = "Konsulent hos Ørsted via Cybercom/KnowIT"
+bullets = [
     "Implementerede virtuelle ressourcer på Azure platformen",
     "Deployment af applikationer via Azure DevOps",
     "Planlægning af udruldning af kubernetes (AKS)",
-  ]},
 ]
 
 [[experience]]
@@ -96,9 +108,10 @@ company = "Udviklings- og Forenklingsstyrelsen"
 duration = "5 år, 1 måned"
 title = "Chefkonsulent"
 period = "aug. 2015 – aug. 2020"
-type = ""
-subsections = [
-  { heading = "Fase 1: On-Prem", bullets = [
+
+[[experience.subsections]]
+heading = "Fase 1: On-Prem"
+bullets = [
     "IaC deployment af on-prem cloud bygget på Mesos/Marathon ved brug af Ansible",
     "Udvikling og vedligeholdelse af Linux-baserede servere (Ubuntu)",
     "Opbygning af docker images",
@@ -106,21 +119,26 @@ subsections = [
     "Import af BBR data til DataStax Graph (DSG)",
     "Medvirkede til tekniskafsnit af offentligt cloud udbud",
     "Implementeret brugergrænseflade komponenter i ClojureScript/Reagent",
-  ]},
-  { heading = "Fase 2: AWS", bullets = [
+]
+
+[[experience.subsections]]
+heading = "Fase 2: AWS"
+bullets = [
     "IaC deployment af shared services (Jenkins, SonarQube, AD spejl) på AWS via Terraform",
     "Udvikling og vedligeholdelse af Linux-baserede servere (EC2, CentOS)",
     "Implementering af firewall-regler herunder securitygroups",
     "Implementering af dokumentkø bygget på SQS, SNS og serverless funktioner",
     "Automatisering af processer og deployment pipelines i Jenkins",
     "Opbygning af docker images",
-  ]},
-  { heading = "Fase 3: Kubernetes", bullets = [
+]
+
+[[experience.subsections]]
+heading = "Fase 3: Kubernetes"
+bullets = [
     "IaC deployment af shared services (Jenkins, SonarQube, AD spejl) på Kubernetes (EKS) via Terraform",
     "Automatisering af processer og deployment pipelines i Jenkins",
     "Opbygning af docker images",
     "GitOps pipelines i Atlantis",
-  ]},
 ]
 
 [[experience]]
@@ -128,11 +146,10 @@ company = "YouSee A/S"
 duration = "1 år, 1 måned"
 title = "Systemudvikler/Programmør"
 period = "aug. 2014 – aug. 2015"
-type = ""
 bullets = [
-  "Produktkatalog med integration til salgsplatform",
-  "Opbygning af docker images",
-  "Performancetest",
+    "Produktkatalog med integration til salgsplatform",
+    "Opbygning af docker images",
+    "Performancetest",
 ]
 
 [[experience]]
@@ -140,12 +157,11 @@ company = "TV2 Danmark"
 duration = "2 år, 8 måneder"
 title = "Webudvikler"
 period = "jan. 2012 – aug. 2014"
-type = ""
 description = "Implementering af portal i Drupal."
 bullets = [
-  "Integration til Teletext",
-  "Integration til Twitter",
-  "Breakingbar",
+    "Integration til Teletext",
+    "Integration til Twitter",
+    "Breakingbar",
 ]
 
 [[experience]]
@@ -153,12 +169,11 @@ company = "MOC Systems"
 duration = "3 år, 10 måneder"
 title = "Webudvikler"
 period = "jan. 2008 – okt. 2011"
-type = ""
 description = "Implementering af hjemmesider i TYPO3."
 bullets = [
-  "SMK",
-  "Venstre",
-  "Red barnet",
+    "SMK",
+    "Venstre",
+    "Red barnet",
 ]
 
 [[experience]]
@@ -166,9 +181,8 @@ company = "Topdanmark"
 duration = "2 år, 1 måned"
 title = "Webudvikler"
 period = "jan. 2006 – jan. 2008"
-type = ""
 bullets = [
-  "Egenudviklet MVC-system mellem TYPO3 og salgsplatform",
+    "Egenudviklet MVC-system mellem TYPO3 og salgsplatform",
 ]
 
 [[experience]]
@@ -176,12 +190,11 @@ company = "WebmindIT"
 duration = "1 år, 1 måned"
 title = "Webudvikler"
 period = "jan. 2005 – jan. 2006"
-type = ""
 description = "Salgsplatform til aviser BT."
 bullets = [
-  "Interface i XULRunner",
-  "Plugin til XULRunner med integration til TAPICOM",
-  "Administrationsmodul",
+    "Interface i XULRunner",
+    "Plugin til XULRunner med integration til TAPICOM",
+    "Administrationsmodul",
 ]
 
 [[experience]]
@@ -189,11 +202,10 @@ company = "AK Techotel"
 duration = "1 år"
 title = "Systemudvikler"
 period = "jan. 2004 – dec. 2004"
-type = ""
 bullets = [
-  "Statistik modul til Picasso hotel CRM system",
-  "Xquery interface til eniro",
-  "SOAP interface til hospital patient hotel",
+    "Statistik modul til Picasso hotel CRM system",
+    "Xquery interface til eniro",
+    "SOAP interface til hospital patient hotel",
 ]
 
 [[education]]
@@ -202,7 +214,7 @@ duration = "1 år, 1 måned"
 degree = "AWS Certified Solutions Architect – Associate"
 period = "2020 – jan. 2021"
 bullets = [
-  "Earners of this certification have a comprehensive understanding of AWS services and technologies.",
+    "Earners of this certification have a comprehensive understanding of AWS services and technologies.",
 ]
 
 [[education]]
@@ -211,8 +223,8 @@ duration = "3 år, 11 måneder"
 degree = "Bachelor of Computer Science"
 period = "aug. 2002 – jun. 2006"
 bullets = [
-  "Linear algebra",
-  "Skrev et spil i Java",
+    "Linear algebra",
+    "Skrev et spil i Java",
 ]
 
 [[education]]
@@ -221,6 +233,6 @@ duration = "2 år, 5 måneder"
 degree = "Datamatiker"
 period = "jan. 2000 – maj 2002"
 bullets = [
-  "Skrev et fordelingssystem til DHL-Stafetten",
-  "Placering af grupper i telte",
+    "Skrev et fordelingssystem til DHL-Stafetten",
+    "Placering af grupper i telte",
 ]
