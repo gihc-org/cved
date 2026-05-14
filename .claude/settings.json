@@ -1,16 +1,1 @@
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Per .guidelines/process.md: \"Nye features skal i TODO før implementering\". The tool input describes an edit/write. Is this implementing a NEW FEATURE (not a bugfix, typo, config change, dependency update, or refactoring of existing code)? If NO (bugfix, typo, etc.) → allow. If YES (new feature): check whether the project's TODO.md file already has an entry covering this feature. If TODO.md covers it → allow. If TODO.md is missing this feature → block with a reminder in Danish that the feature skal tilføjes til TODO.md før implementering. Tool input: $ARGUMENTS",
-            "timeout": 15
-          }
-        ]
-      }
-    ]
-  }
-}
+{}

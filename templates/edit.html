@@ -153,6 +153,18 @@
     /* Preview link */
     .preview-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
+    /* Crop modal */
+    #crop-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; }
+    .crop-box { background: white; border-radius: 12px; padding: 24px; width: 368px; }
+    .crop-box h3 { margin: 0 0 16px; font-size: 16px; color: var(--text); }
+    #crop-canvas { display: block; cursor: grab; }
+    #crop-canvas.dragging { cursor: grabbing; }
+    .crop-hint { font-size: 11px; color: var(--muted); text-align: center; margin: 8px 0 0; }
+    .crop-zoom-row { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
+    .crop-zoom-row span { font-size: 18px; color: var(--muted); line-height: 1; user-select: none; }
+    .crop-zoom-row input[type="range"] { flex: 1; cursor: pointer; }
+    .crop-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
     /* Collapsible entries */
     .entry-toggle { cursor: pointer; user-select: none; }
     .entry-body { }
@@ -189,6 +201,7 @@
     {% endif %}
 
     <form id="cv-form" method="POST" action="/save" enctype="multipart/form-data">
+      <input type="hidden" name="personal_photo_crop" id="crop-data" value="">
 
       <!-- Personal -->
       <div class="card" id="personal">
@@ -226,14 +239,14 @@
             <div class="photo-preview-row">
               <img class="photo-preview" src="{{ cv.personal.photo }}" alt="Nuværende profilbillede">
               <div class="photo-actions">
-                <input type="file" name="personal_photo" accept="image/*" onchange="previewPhoto(this)">
+                <input type="file" name="personal_photo" accept="image/*" onchange="openCropModal(this)">
                 <label class="remove-photo-label">
                   <input type="checkbox" name="remove_photo" value="1"> Fjern billede
                 </label>
               </div>
             </div>
             {% else %}
-            <input type="file" name="personal_photo" accept="image/*" onchange="previewPhoto(this)">
+            <input type="file" name="personal_photo" accept="image/*" onchange="openCropModal(this)">
             <img class="photo-preview" id="photo-preview-new" style="display:none" alt="Preview">
             {% endif %}
           </div>
@@ -448,21 +461,139 @@
   <a href="/preview" target="_blank" class="btn btn-outline btn-sm" style="color:#bdc3c7;border-color:#bdc3c7">👁 Preview</a>
 </div>
 
+<!-- Crop modal -->
+<div id="crop-modal">
+  <div class="crop-box">
+    <h3>Tilpas profilbillede</h3>
+    <canvas id="crop-canvas" width="320" height="320"></canvas>
+    <p class="crop-hint">Træk for at justere &nbsp;·&nbsp; Zoom med slideren</p>
+    <div class="crop-zoom-row">
+      <span>−</span>
+      <input type="range" id="crop-zoom" min="1" max="3" step="0.01" value="1">
+      <span>+</span>
+    </div>
+    <div class="crop-actions">
+      <button type="button" onclick="cancelCrop()" class="btn btn-secondary">Annuller</button>
+      <button type="button" onclick="confirmCrop()" class="btn btn-primary">Gem udskæring</button>
+    </div>
+  </div>
+</div>
+
 <script>
-function previewPhoto(input) {
+const CROP_D = 320;
+const CROP_OUT = 400;
+
+let _img = null, _scale = 1, _ox = 0, _oy = 0;
+let _dragging = false, _dx = 0, _dy = 0, _dox = 0, _doy = 0;
+let _fileInput = null;
+
+function openCropModal(input) {
   const file = input.files[0];
   if (!file) return;
+  _fileInput = input;
   const reader = new FileReader();
   reader.onload = function(e) {
-    let preview = input.parentElement.parentElement.querySelector('.photo-preview');
-    if (!preview) {
-      preview = document.getElementById('photo-preview-new');
-      preview.style.display = 'inline-block';
-    }
-    preview.src = e.target.result;
+    const img = new Image();
+    img.onload = function() {
+      _img = img;
+      const minScale = Math.max(CROP_D / img.width, CROP_D / img.height);
+      _scale = minScale;
+      _ox = (CROP_D - img.width * minScale) / 2;
+      _oy = (CROP_D - img.height * minScale) / 2;
+      const z = document.getElementById('crop-zoom');
+      z.min = minScale; z.max = minScale * 3; z.step = minScale * 0.01; z.value = minScale;
+      drawCrop();
+      document.getElementById('crop-modal').style.display = 'flex';
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
+
+function clamp() {
+  _ox = Math.min(0, Math.max(CROP_D - _img.width * _scale, _ox));
+  _oy = Math.min(0, Math.max(CROP_D - _img.height * _scale, _oy));
+}
+
+function drawCrop() {
+  const canvas = document.getElementById('crop-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, CROP_D, CROP_D);
+  ctx.drawImage(_img, _ox, _oy, _img.width * _scale, _img.height * _scale);
+  ctx.fillStyle = 'rgba(0,0,0,0.55)';
+  ctx.beginPath();
+  ctx.rect(0, 0, CROP_D, CROP_D);
+  ctx.arc(CROP_D / 2, CROP_D / 2, CROP_D / 2, 0, Math.PI * 2, true);
+  ctx.fill('evenodd');
+  ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(CROP_D / 2, CROP_D / 2, CROP_D / 2 - 1, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function cancelCrop() {
+  document.getElementById('crop-modal').style.display = 'none';
+  if (_fileInput) _fileInput.value = '';
+  _img = null;
+}
+
+function confirmCrop() {
+  const out = document.createElement('canvas');
+  out.width = CROP_OUT; out.height = CROP_OUT;
+  const ctx = out.getContext('2d');
+  const r = CROP_OUT / CROP_D;
+  ctx.drawImage(_img, _ox * r, _oy * r, _img.width * _scale * r, _img.height * _scale * r);
+  const dataUrl = out.toDataURL('image/jpeg', 0.92);
+  document.getElementById('crop-data').value = dataUrl;
+  document.querySelectorAll('.photo-preview').forEach(p => { p.src = dataUrl; p.style.display = 'inline-block'; });
+  const np = document.getElementById('photo-preview-new');
+  if (np) { np.src = dataUrl; np.style.display = 'inline-block'; }
+  if (_fileInput) _fileInput.value = '';
+  document.getElementById('crop-modal').style.display = 'none';
+  _img = null;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const canvas = document.getElementById('crop-canvas');
+
+  canvas.addEventListener('mousedown', function(e) {
+    _dragging = true; _dx = e.clientX; _dy = e.clientY; _dox = _ox; _doy = _oy;
+    canvas.classList.add('dragging');
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!_dragging) return;
+    _ox = _dox + (e.clientX - _dx); _oy = _doy + (e.clientY - _dy);
+    clamp(); drawCrop();
+  });
+  document.addEventListener('mouseup', function() {
+    _dragging = false; canvas.classList.remove('dragging');
+  });
+
+  canvas.addEventListener('touchstart', function(e) {
+    const t = e.touches[0];
+    _dragging = true; _dx = t.clientX; _dy = t.clientY; _dox = _ox; _doy = _oy;
+  }, {passive: true});
+  canvas.addEventListener('touchmove', function(e) {
+    if (!_dragging) return;
+    const t = e.touches[0];
+    _ox = _dox + (t.clientX - _dx); _oy = _doy + (t.clientY - _dy);
+    clamp(); drawCrop();
+  }, {passive: true});
+  canvas.addEventListener('touchend', function() { _dragging = false; });
+
+  document.getElementById('crop-zoom').addEventListener('input', function() {
+    if (!_img) return;
+    const ns = parseFloat(this.value);
+    _ox = CROP_D / 2 - (CROP_D / 2 - _ox) * (ns / _scale);
+    _oy = CROP_D / 2 - (CROP_D / 2 - _oy) * (ns / _scale);
+    _scale = ns; clamp(); drawCrop();
+  });
+
+  document.getElementById('crop-modal').addEventListener('click', function(e) {
+    if (e.target === this) cancelCrop();
+  });
+});
 
 function addLang() {
   const div = document.createElement('div');

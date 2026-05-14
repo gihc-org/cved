@@ -1,3 +1,4 @@
+import base64
 import tomllib
 import tomli_w
 import uuid
@@ -75,15 +76,23 @@ async def save(request: Request):
     global _flash
     form = await request.form()
 
-    # Handle photo upload
+    # Handle photo: crop-data (base64 from browser crop tool) takes priority over raw upload
     photo_path = ""
-    upload = form.get("personal_photo")
-    if upload is not None and hasattr(upload, "filename") and upload.filename:
-        ext = Path(upload.filename).suffix or ".jpg"
-        safe_name = f"photo_{uuid.uuid4().hex[:8]}{ext}"
+    crop_data = form.get("personal_photo_crop", "")
+    if crop_data and isinstance(crop_data, str) and crop_data.startswith("data:image"):
+        _, encoded = crop_data.split(",", 1)
+        safe_name = f"photo_{uuid.uuid4().hex[:8]}.jpg"
         dest = static_dir / safe_name
-        dest.write_bytes(await upload.read())
+        dest.write_bytes(base64.b64decode(encoded))
         photo_path = f"static/{safe_name}"
+    else:
+        upload = form.get("personal_photo")
+        if upload is not None and hasattr(upload, "filename") and upload.filename:
+            ext = Path(upload.filename).suffix or ".jpg"
+            safe_name = f"photo_{uuid.uuid4().hex[:8]}{ext}"
+            dest = static_dir / safe_name
+            dest.write_bytes(await upload.read())
+            photo_path = f"static/{safe_name}"
 
     form_dict: dict[str, list[str]] = {}
     for k, v in form.multi_items():
