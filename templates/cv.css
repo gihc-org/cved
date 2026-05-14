@@ -153,6 +153,7 @@ body {
 }
 
 .skill-tag {
+  display: inline-block;
   background: rgba(52,152,219,0.2);
   color: var(--sidebar-text);
   border: 1px solid rgba(52,152,219,0.4);
