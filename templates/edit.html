@@ -153,9 +153,11 @@
     /* Preview link */
     .preview-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-    /* Crop modal */
-    #crop-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; }
+    /* Crop + kamera modal */
+    #crop-modal, #camera-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; }
     .crop-box { background: white; border-radius: 12px; padding: 24px; width: 368px; }
+    #camera-video { width: 100%; border-radius: 8px; display: block; }
+    .photo-input-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .crop-box h3 { margin: 0 0 16px; font-size: 16px; color: var(--text); }
     #crop-canvas { display: block; cursor: grab; }
     #crop-canvas.dragging { cursor: grabbing; }
@@ -239,14 +241,20 @@
             <div class="photo-preview-row">
               <img class="photo-preview" src="{{ cv.personal.photo }}" alt="Nuværende profilbillede">
               <div class="photo-actions">
-                <input type="file" name="personal_photo" accept="image/*" onchange="openCropModal(this)">
+                <div class="photo-input-row">
+                  <input type="file" name="personal_photo" accept="image/*" onchange="openCropModal(this)">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="openCamera()">📷 Kamera</button>
+                </div>
                 <label class="remove-photo-label">
                   <input type="checkbox" name="remove_photo" value="1"> Fjern billede
                 </label>
               </div>
             </div>
             {% else %}
-            <input type="file" name="personal_photo" accept="image/*" onchange="openCropModal(this)">
+            <div class="photo-input-row">
+              <input type="file" name="personal_photo" accept="image/*" onchange="openCropModal(this)">
+              <button type="button" class="btn btn-outline btn-sm" onclick="openCamera()">📷 Kamera</button>
+            </div>
             <img class="photo-preview" id="photo-preview-new" style="display:none" alt="Preview">
             {% endif %}
           </div>
@@ -461,6 +469,18 @@
   <a href="/preview" target="_blank" class="btn btn-outline btn-sm" style="color:#bdc3c7;border-color:#bdc3c7">👁 Preview</a>
 </div>
 
+<!-- Kamera modal -->
+<div id="camera-modal">
+  <div class="crop-box">
+    <h3>Tag profilbillede</h3>
+    <video id="camera-video" autoplay playsinline></video>
+    <div class="crop-actions" style="margin-top:16px;">
+      <button type="button" onclick="closeCamera()" class="btn btn-secondary">Annuller</button>
+      <button type="button" onclick="captureFromCamera()" class="btn btn-primary">Tag billede</button>
+    </div>
+  </div>
+</div>
+
 <!-- Crop modal -->
 <div id="crop-modal">
   <div class="crop-box">
@@ -486,6 +506,19 @@ const CROP_OUT = 400;
 let _img = null, _scale = 1, _ox = 0, _oy = 0;
 let _dragging = false, _dx = 0, _dy = 0, _dox = 0, _doy = 0;
 let _fileInput = null;
+let _cameraStream = null;
+
+function startCropWith(img) {
+  _img = img;
+  const minScale = Math.max(CROP_D / img.width, CROP_D / img.height);
+  _scale = minScale;
+  _ox = (CROP_D - img.width * minScale) / 2;
+  _oy = (CROP_D - img.height * minScale) / 2;
+  const z = document.getElementById('crop-zoom');
+  z.min = minScale; z.max = minScale * 3; z.step = minScale * 0.01; z.value = minScale;
+  drawCrop();
+  document.getElementById('crop-modal').style.display = 'flex';
+}
 
 function openCropModal(input) {
   const file = input.files[0];
@@ -494,20 +527,41 @@ function openCropModal(input) {
   const reader = new FileReader();
   reader.onload = function(e) {
     const img = new Image();
-    img.onload = function() {
-      _img = img;
-      const minScale = Math.max(CROP_D / img.width, CROP_D / img.height);
-      _scale = minScale;
-      _ox = (CROP_D - img.width * minScale) / 2;
-      _oy = (CROP_D - img.height * minScale) / 2;
-      const z = document.getElementById('crop-zoom');
-      z.min = minScale; z.max = minScale * 3; z.step = minScale * 0.01; z.value = minScale;
-      drawCrop();
-      document.getElementById('crop-modal').style.display = 'flex';
-    };
+    img.onload = function() { startCropWith(img); };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
+}
+
+async function openCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    _cameraStream = stream;
+    const video = document.getElementById('camera-video');
+    video.srcObject = stream;
+    video.play().catch(() => {});
+    document.getElementById('camera-modal').style.display = 'flex';
+  } catch (e) {
+    alert('Kamera ikke tilgængeligt: ' + e.message);
+  }
+}
+
+function closeCamera() {
+  if (_cameraStream) { _cameraStream.getTracks().forEach(t => t.stop()); _cameraStream = null; }
+  document.getElementById('camera-modal').style.display = 'none';
+}
+
+function captureFromCamera() {
+  const video = document.getElementById('camera-video');
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  closeCamera();
+  const img = new Image();
+  img.onload = function() { startCropWith(img); };
+  img.src = canvas.toDataURL('image/jpeg', 0.95);
 }
 
 function clamp() {
@@ -592,6 +646,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('crop-modal').addEventListener('click', function(e) {
     if (e.target === this) cancelCrop();
+  });
+  document.getElementById('camera-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeCamera();
   });
 });
 
