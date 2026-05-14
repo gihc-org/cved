@@ -12,6 +12,14 @@ This file provides guidance to AI coding agents working in this repository.
 
 ---
 
+## Ved sessionstart
+
+Læs inden du går i gang:
+- `./kontekst/` — projektspecifik kontekst (arkitektur, quirks, datamodel)
+- Seneste fil i `./referater/` — hvad der sidst blev lavet og besluttet
+
+---
+
 ## Projektbeskrivelse
 
 CV-generator der læser data fra `cv.toml` og eksporterer til PDF, DOCX og ODT. Inkluderer en web-editor til redigering af CV-data i browseren.
