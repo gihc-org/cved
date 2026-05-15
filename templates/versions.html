@@ -55,6 +55,12 @@
     .version-note { font-size: 13px; color: var(--text); margin-top: 6px; font-style: italic; }
     .version-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; flex-wrap: wrap; }
     .empty-state { color: var(--muted); font-size: 14px; padding: 12px 0; }
+    .kladde-card { border-color: #f39c12; background: #fffdf0; }
+    .badge-kladde {
+      display: inline-block; background: #f39c12; color: white;
+      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+    }
     .flash { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
     .flash-success { background: #d5f5e3; color: #1e8449; border: 1px solid #a9dfbf; }
     .flash-error { background: #fadbd8; color: #922b21; border: 1px solid #f1948a; }
@@ -81,10 +87,11 @@
     <div class="section-header">🇩🇰 Dansk</div>
     {% if versions_da %}
       {% for v in versions_da %}
-      <div class="version-card">
+      <div class="version-card {% if v.is_kladde %}kladde-card{% endif %}">
         <div class="version-info">
-          <div class="version-job">{{ v.job }}</div>
-          <div class="version-date">{{ v.date }}</div>
+          {% if v.is_kladde %}<div><span class="badge-kladde">{{ v.job }}</span></div>
+          {% else %}<div class="version-job">{{ v.job }}</div>{% endif %}
+          {% if v.date %}<div class="version-date">{{ v.date }}</div>{% endif %}
           {% if v.note %}<div class="version-note">{{ v.note }}</div>{% endif %}
         </div>
         <div class="version-actions">
@@ -104,10 +111,11 @@
     <div class="section-header">🇬🇧 English</div>
     {% if versions_en %}
       {% for v in versions_en %}
-      <div class="version-card">
+      <div class="version-card {% if v.is_kladde %}kladde-card{% endif %}">
         <div class="version-info">
-          <div class="version-job">{{ v.job }}</div>
-          <div class="version-date">{{ v.date }}</div>
+          {% if v.is_kladde %}<div><span class="badge-kladde">{{ v.job }}</span></div>
+          {% else %}<div class="version-job">{{ v.job }}</div>{% endif %}
+          {% if v.date %}<div class="version-date">{{ v.date }}</div>{% endif %}
           {% if v.note %}<div class="version-note">{{ v.note }}</div>{% endif %}
         </div>
         <div class="version-actions">

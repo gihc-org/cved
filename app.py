@@ -3,7 +3,7 @@ import re
 import tomllib
 import tomli_w
 import uuid
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from fastapi import FastAPI, Query, Request, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
@@ -58,20 +58,31 @@ def list_versions(lang: str) -> list[dict]:
     versions_dir = BASE / "versions" / lang
     if not versions_dir.exists():
         return []
-    result = []
+    kladde = None
+    regular = []
     for f in sorted(versions_dir.glob("*.toml"), reverse=True):
         try:
             with open(f, "rb") as fp:
                 data = tomllib.load(fp)
-            result.append({
-                "filename": f.name,
-                "job": data.get("_job", f.stem),
-                "note": data.get("_note", ""),
-                "date": f.stem[:10],
-            })
+            if f.name == "kladde.toml":
+                kladde = {
+                    "filename": f.name,
+                    "job": data.get("_job", "Kladde"),
+                    "note": data.get("_note", ""),
+                    "date": "",
+                    "is_kladde": True,
+                }
+            else:
+                regular.append({
+                    "filename": f.name,
+                    "job": data.get("_job", f.stem),
+                    "note": data.get("_note", ""),
+                    "date": f.stem[:10],
+                    "is_kladde": False,
+                })
         except Exception:
             pass
-    return result
+    return ([kladde] if kladde else []) + regular
 
 
 def _vals(form: dict, key: str) -> list[str]:
@@ -344,11 +355,23 @@ async def restore_version(lang: str, filename: str):
     version_path = BASE / "versions" / lang / filename
     if not version_path.exists():
         return HTMLResponse("Version ikke fundet", status_code=404)
+
+    # Auto-gem det aktive CV som kladde inden overskrivning
+    current_cv = load_cv(lang)
+    kladde_label = "Kladde" if lang == "da" else "Draft"
+    timestamp = datetime.now().strftime("%d. %b %Y kl. %H:%M")
+    current_cv["_job"] = kladde_label
+    current_cv["_note"] = f"Auto-gemt inden gendan af '{Path(filename).stem}' ({timestamp})"
+    versions_dir = BASE / "versions" / lang
+    versions_dir.mkdir(parents=True, exist_ok=True)
+    with open(versions_dir / "kladde.toml", "wb") as f:
+        tomli_w.dump(current_cv, f)
+
     with open(version_path, "rb") as f:
         cv = tomllib.load(f)
     cv = cv_render.strip_meta(cv)
     save_cv(cv, lang)
-    _flash = {"type": "success", "message": f"Version gendannet: {filename}"}
+    _flash = {"type": "success", "message": f"Version gendannet — kladde auto-gemt"}
     return RedirectResponse(f"/?lang={lang}", status_code=303)
 
 

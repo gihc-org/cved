@@ -27,3 +27,4 @@
   - [x] `/versions`-side i web-editoren: liste over gemte versioner med metadata
   - [x] Preview/PDF/DOCX-knapper på hver version i `/versions`-siden
   - [x] "Gendan"-knap der kopierer en version til den aktive `cv.toml` / `cv-en.toml`
+  - [x] Auto-gem kladde ved gendan: aktive CV gemmes som `kladde.toml` inden overskrivning, vises øverst i /versions med orange badge
