@@ -9,6 +9,7 @@ This file provides guidance to AI coding agents working in this repository.
 @.guidelines/testing-and-docs.md
 @.guidelines/process.md
 @.guidelines/knowledge-management.md
+@.guidelines/claude-code.md
 
 ---
 
