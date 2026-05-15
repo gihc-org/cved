@@ -1,9 +1,11 @@
 import base64
+import re
 import tomllib
 import tomli_w
 import uuid
+from datetime import date
 from pathlib import Path
-from fastapi import FastAPI, Request, UploadFile
+from fastapi import FastAPI, Query, Request, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from jinja2 import Environment, FileSystemLoader
@@ -18,21 +20,58 @@ app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 _jinja = Environment(loader=FileSystemLoader(str(BASE / "templates")), auto_reload=True)
 
+CV_FILES = {
+    "da": BASE / "cv.toml",
+    "en": BASE / "cv-en.toml",
+}
+
 
 def render_template(name: str, **ctx) -> str:
     return _jinja.get_template(name).render(**ctx)
 
+
 _flash: dict | None = None
 
 
-def load_cv() -> dict:
-    with open(BASE / "cv.toml", "rb") as f:
+def load_cv(lang: str = "da") -> dict:
+    with open(CV_FILES[lang], "rb") as f:
         return tomllib.load(f)
 
 
-def save_cv(data: dict):
-    with open(BASE / "cv.toml", "wb") as f:
+def save_cv(data: dict, lang: str = "da") -> None:
+    data = {"lang": lang, **data}
+    with open(CV_FILES[lang], "wb") as f:
         tomli_w.dump(data, f)
+
+
+def _preview_html(cv: dict) -> str:
+    import shutil
+    shutil.copy(BASE / "templates" / "cv.css", static_dir / "cv.css")
+    env = Environment(loader=FileSystemLoader(str(BASE / "templates")))
+    tmpl = env.get_template("cv.html")
+    cv_lang = cv.get("lang", "da")
+    labels = cv_render.LABELS.get(cv_lang, cv_render.LABELS["da"])
+    return tmpl.render(cv=cv, css_url="/static/cv.css", labels=labels)
+
+
+def list_versions(lang: str) -> list[dict]:
+    versions_dir = BASE / "versions" / lang
+    if not versions_dir.exists():
+        return []
+    result = []
+    for f in sorted(versions_dir.glob("*.toml"), reverse=True):
+        try:
+            with open(f, "rb") as fp:
+                data = tomllib.load(fp)
+            result.append({
+                "filename": f.name,
+                "job": data.get("_job", f.stem),
+                "note": data.get("_note", ""),
+                "date": f.stem[:10],
+            })
+        except Exception:
+            pass
+    return result
 
 
 def _vals(form: dict, key: str) -> list[str]:
@@ -43,38 +82,27 @@ def _vals(form: dict, key: str) -> list[str]:
 
 
 @app.get("/", response_class=HTMLResponse)
-async def editor(request: Request):
+async def editor(request: Request, lang: str = Query("da")):
     global _flash
     flash = _flash
     _flash = None
-    cv = load_cv()
-    return HTMLResponse(render_template("edit.html", cv=cv, flash=flash))
+    cv = load_cv(lang)
+    return HTMLResponse(render_template("edit.html", cv=cv, flash=flash, lang=lang))
 
 
 @app.get("/preview", response_class=HTMLResponse)
-async def preview(request: Request):
-    cv = load_cv()
-    html = cv_render.render_html(cv)
-    # Inject absolute CSS path for browser preview
-    html = html.replace(
-        'href="{{ css_url | default(\'cv.css\') }}"',
-        'href="/static/cv.css"'
-    )
-    # Serve CSS from static for preview
-    import shutil
-    shutil.copy(BASE / "templates" / "cv.css", static_dir / "cv.css")
-    # Re-render with correct css_url
-    from jinja2 import Environment, FileSystemLoader
-    env = Environment(loader=FileSystemLoader(str(BASE / "templates")))
-    tmpl = env.get_template("cv.html")
-    html = tmpl.render(cv=cv, css_url="/static/cv.css")
-    return HTMLResponse(html)
+async def preview(request: Request, lang: str = Query("da")):
+    cv = load_cv(lang)
+    return HTMLResponse(_preview_html(cv))
 
 
 @app.post("/save")
 async def save(request: Request):
     global _flash
     form = await request.form()
+
+    # Determine language from hidden form field
+    lang = form.get("lang", "da") or "da"
 
     # Handle photo: crop-data (base64 from browser crop tool) takes priority over raw upload
     photo_path = ""
@@ -97,7 +125,7 @@ async def save(request: Request):
     form_dict: dict[str, list[str]] = {}
     for k, v in form.multi_items():
         if hasattr(v, "filename"):
-            continue  # UploadFile, already handled
+            continue
         form_dict.setdefault(k, []).append(v)
 
     def first(key: str, default: str = "") -> str:
@@ -108,21 +136,18 @@ async def save(request: Request):
 
     cv: dict = {}
 
-    # Photo: use new upload, or clear if remove requested, or keep existing
     if photo_path:
         cv_photo = photo_path
     elif first("remove_photo"):
         cv_photo = ""
-        # Clean up old photo file
-        old = load_cv().get("personal", {}).get("photo", "")
+        old = load_cv(lang).get("personal", {}).get("photo", "")
         if old:
             old_path = BASE / old
             if old_path.exists():
                 old_path.unlink()
     else:
-        cv_photo = load_cv().get("personal", {}).get("photo", "")
+        cv_photo = load_cv(lang).get("personal", {}).get("photo", "")
 
-    # Personal
     cv["personal"] = {
         "name": first("personal_name"),
         "title": first("personal_title"),
@@ -132,11 +157,9 @@ async def save(request: Request):
         "photo": cv_photo,
     }
 
-    # Summary / About
     cv["summary"] = {"text": first("summary_text")}
     cv["about"] = {"text": first("about_text")}
 
-    # Languages
     lang_names = form_dict.get("lang_name", [])
     lang_levels = form_dict.get("lang_level", [])
     cv["languages"] = [
@@ -145,19 +168,8 @@ async def save(request: Request):
         if n.strip()
     ]
 
-    # Skills
     cv["skills"] = {"tags": many("skill")}
 
-    # Experience — walk parallel arrays from form
-    companies   = form_dict.get("exp_company", [])
-    durations   = form_dict.get("exp_duration", [])
-    exp_titles  = form_dict.get("exp_title", [])
-    periods     = form_dict.get("exp_period", [])
-    types       = form_dict.get("exp_type", [])
-    descriptions = form_dict.get("exp_description", [])
-
-    # bullets and subsections come interleaved per job — we need a smarter parse
-    # We rebuild from the raw multi_items in order
     items = list(form.multi_items())
 
     def extract_experience(items):
@@ -201,14 +213,13 @@ async def save(request: Request):
                 cur.setdefault("subsections", []).append(cur_sub)
             jobs.append(cur)
 
-        # Clean empty optional fields
         cleaned = []
         for j in jobs:
             if not j.get("company", "").strip():
                 continue
-            if not j.get("type"):      del j["type"]
+            if not j.get("type"):        del j["type"]
             if not j.get("description"): del j["description"]
-            if not j.get("bullets"):   del j["bullets"]
+            if not j.get("bullets"):     del j["bullets"]
             if not j.get("subsections"): del j["subsections"]
             cleaned.append(j)
         return cleaned
@@ -243,29 +254,124 @@ async def save(request: Request):
     cv["experience"] = extract_experience(items)
     cv["education"] = extract_education(items)
 
-    save_cv(cv)
+    save_cv(cv, lang)
     _flash = {"type": "success", "message": "CV gemt!"}
-    return RedirectResponse("/", status_code=303)
+    return RedirectResponse(f"/?lang={lang}", status_code=303)
+
+
+@app.post("/save-version")
+async def save_version_endpoint(request: Request):
+    global _flash
+    form = await request.form()
+    lang = (form.get("lang") or "da").strip()
+    job = (form.get("_job") or "").strip()
+    note = (form.get("_note") or "").strip()
+
+    cv = load_cv(lang)
+    cv["_job"] = job
+    cv["_note"] = note
+
+    slug = re.sub(r"[^a-z0-9]+", "-", job.lower())[:40].strip("-") or "version"
+    filename = f"{date.today().isoformat()}_{slug}.toml"
+
+    versions_dir = BASE / "versions" / lang
+    versions_dir.mkdir(parents=True, exist_ok=True)
+    with open(versions_dir / filename, "wb") as f:
+        tomli_w.dump(cv, f)
+
+    _flash = {"type": "success", "message": f"Version gemt: {filename}"}
+    return RedirectResponse("/versions", status_code=303)
+
+
+@app.get("/versions", response_class=HTMLResponse)
+async def versions_page():
+    global _flash
+    flash = _flash
+    _flash = None
+    return HTMLResponse(render_template(
+        "versions.html",
+        versions_da=list_versions("da"),
+        versions_en=list_versions("en"),
+        flash=flash,
+    ))
+
+
+@app.get("/versions/{lang}/{filename}/preview", response_class=HTMLResponse)
+async def preview_version(lang: str, filename: str):
+    version_path = BASE / "versions" / lang / filename
+    if not version_path.exists():
+        return HTMLResponse("Version ikke fundet", status_code=404)
+    with open(version_path, "rb") as f:
+        cv = tomllib.load(f)
+    return HTMLResponse(_preview_html(cv))
+
+
+@app.get("/versions/{lang}/{filename}/download/pdf")
+async def download_version_pdf(lang: str, filename: str):
+    version_path = BASE / "versions" / lang / filename
+    if not version_path.exists():
+        return HTMLResponse("Version ikke fundet", status_code=404)
+    with open(version_path, "rb") as f:
+        cv = tomllib.load(f)
+    out_path = BASE / "output" / "version-temp.pdf"
+    out_path.parent.mkdir(exist_ok=True)
+    cv_render.to_pdf(cv, out_path=out_path)
+    stem = Path(filename).stem
+    return FileResponse(str(out_path), filename=f"cv-{stem}.pdf", media_type="application/pdf")
+
+
+@app.get("/versions/{lang}/{filename}/download/docx")
+async def download_version_docx(lang: str, filename: str):
+    version_path = BASE / "versions" / lang / filename
+    if not version_path.exists():
+        return HTMLResponse("Version ikke fundet", status_code=404)
+    with open(version_path, "rb") as f:
+        cv = tomllib.load(f)
+    out_path = BASE / "output" / "version-temp.docx"
+    out_path.parent.mkdir(exist_ok=True)
+    cv_render.to_docx(cv, out_path=out_path)
+    stem = Path(filename).stem
+    return FileResponse(
+        str(out_path),
+        filename=f"cv-{stem}.docx",
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
+
+
+@app.post("/versions/{lang}/{filename}/restore")
+async def restore_version(lang: str, filename: str):
+    global _flash
+    version_path = BASE / "versions" / lang / filename
+    if not version_path.exists():
+        return HTMLResponse("Version ikke fundet", status_code=404)
+    with open(version_path, "rb") as f:
+        cv = tomllib.load(f)
+    cv = cv_render.strip_meta(cv)
+    save_cv(cv, lang)
+    _flash = {"type": "success", "message": f"Version gendannet: {filename}"}
+    return RedirectResponse(f"/?lang={lang}", status_code=303)
 
 
 @app.get("/download/pdf")
-async def download_pdf():
-    cv = load_cv()
+async def download_pdf(lang: str = Query("da")):
+    cv = load_cv(lang)
     path = cv_render.to_pdf(cv)
-    return FileResponse(str(path), filename="cv.pdf", media_type="application/pdf")
+    return FileResponse(str(path), filename=f"cv-{lang}.pdf", media_type="application/pdf")
 
 
 @app.get("/download/docx")
-async def download_docx():
-    cv = load_cv()
+async def download_docx(lang: str = Query("da")):
+    cv = load_cv(lang)
     path = cv_render.to_docx(cv)
-    return FileResponse(str(path), filename="cv.docx",
-                        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+    return FileResponse(
+        str(path),
+        filename=f"cv-{lang}.docx",
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
 
 
 @app.get("/download/odf")
-async def download_odf():
-    cv = load_cv()
+async def download_odf(lang: str = Query("da")):
+    cv = load_cv(lang)
     path = cv_render.to_odf(cv)
-    return FileResponse(str(path), filename="cv.odt",
-                        media_type="application/vnd.oasis.opendocument.text")
+    return FileResponse(str(path), filename=f"cv-{lang}.odt", media_type="application/vnd.oasis.opendocument.text")

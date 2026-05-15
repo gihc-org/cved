@@ -1,0 +1,240 @@
+lang = "en"
+
+languages = [
+    { name = "Danish", level = 4 },
+    { name = "English", level = 3 },
+]
+
+[personal]
+name = "Kristian Nygaard Jensen"
+title = "Systems Developer"
+email = "kristian.n.jensen@gmail.com"
+phone = "52699443"
+address = "Krudttårnsvej 121, 2791 Dragør"
+photo = "static/photo_9fa0830d.jpg"
+
+[summary]
+text = "I work with DevOps and cloud-based solutions with a focus on stable operations, security, and efficient delivery. With solid experience in AWS and Infrastructure as Code (IaC), I have automated and standardised infrastructure to reduce time-to-market and support agile workflows. I have worked with monitoring, access management, and operations in environments with high compliance and information security requirements. I am also expanding my cloud expertise to Azure-based platforms. I am motivated by creating solutions that improve the user experience and strengthen IT as an integrated part of the business."
+
+[about]
+text = "I am a good colleague who, in both small and large workplaces and projects, takes pride in contributing with a positive attitude and making sure everyone keeps up — even when the pace is high. In my spare time I enjoy my children and outdoor activities, preferably combined."
+
+[skills]
+tags = [
+    "Ansible",
+    "Artifactory",
+    "AWS Cloud",
+    "Azure DevOps",
+    "Bash",
+    "CentOS",
+    "Cerebro",
+    "Clojure",
+    "ClojureScript",
+    "Delphi",
+    "Docker",
+    "Drupal",
+    "Fluentd",
+    "GoCD",
+    "Go Test",
+    "HTML + CSS",
+    "JavaScript",
+    "Jenkins",
+    "Kibana",
+    "Kubernetes",
+    "Marathon",
+    "Mesos",
+    "MSSQL",
+    "MySQL",
+    "Node.js",
+    "PHP",
+    "PostgreSQL",
+    "Rancher",
+    "SOAP",
+    "SonarQube",
+    "Terraform",
+    "TYPO3",
+]
+
+[[experience]]
+company = "JYSK A/S"
+duration = "5 months"
+title = "DevOps"
+period = "Feb 2023 – Jun 2023"
+type = "Consultant"
+bullets = [
+    "Implementing pipelines in Jenkins",
+    "Maintaining Jenkins",
+    "Maintaining virtual machines",
+    "Maintaining AWX projects",
+    "Building Docker images",
+]
+
+[[experience]]
+company = "0071"
+duration = "9 months"
+title = "Software Developer"
+period = "May 2022 – Jan 2023"
+description = "Implementation of publishing platform (Zero Status)."
+bullets = [
+    "Application developed in Node.js",
+    "Documents stored on IPFS",
+]
+
+[[experience]]
+company = "Cybercom"
+duration = "1 year, 7 months"
+title = "DevOps Engineer"
+period = "Oct 2020 – Apr 2022"
+description = "Infrastructure R&D. Deployment via CDK and Terraform."
+
+[[experience.subsections]]
+heading = "Consultant at COOP via Cybercom/KnowIT"
+bullets = [
+    "Implemented logging infrastructure",
+    "Rancher",
+    "Cerebro, Elasticsearch / Kibana, Fluentd",
+    "Terraform",
+    "Building Docker images",
+]
+
+[[experience.subsections]]
+heading = "Consultant at Ørsted via Cybercom/KnowIT"
+bullets = [
+    "Implemented virtual resources on the Azure platform",
+    "Deployment of applications via Azure DevOps",
+    "Planning of Kubernetes rollout (AKS)",
+]
+
+[[experience]]
+company = "Udviklings- og Forenklingsstyrelsen"
+duration = "5 years, 1 month"
+title = "Senior Consultant"
+period = "Aug 2015 – Aug 2020"
+
+[[experience.subsections]]
+heading = "Phase 1: On-Prem"
+bullets = [
+    "IaC deployment of on-prem cloud built on Mesos/Marathon using Ansible",
+    "Development and maintenance of Linux-based servers (Ubuntu)",
+    "Building Docker images",
+    "Automation of processes and deployment pipelines in Jenkins and GoCD",
+    "Import of BBR data to DataStax Graph (DSG)",
+    "Contributed to the technical section of a public cloud tender",
+    "Implemented user interface components in ClojureScript/Reagent",
+]
+
+[[experience.subsections]]
+heading = "Phase 2: AWS"
+bullets = [
+    "IaC deployment of shared services (Jenkins, SonarQube, AD mirror) on AWS via Terraform",
+    "Development and maintenance of Linux-based servers (EC2, CentOS)",
+    "Implementation of firewall rules including security groups",
+    "Implementation of document queue built on SQS, SNS and serverless functions",
+    "Automation of processes and deployment pipelines in Jenkins",
+    "Building Docker images",
+]
+
+[[experience.subsections]]
+heading = "Phase 3: Kubernetes"
+bullets = [
+    "IaC deployment of shared services (Jenkins, SonarQube, AD mirror) on Kubernetes (EKS) via Terraform",
+    "Automation of processes and deployment pipelines in Jenkins",
+    "Building Docker images",
+    "GitOps pipelines in Atlantis",
+]
+
+[[experience]]
+company = "YouSee A/S"
+duration = "1 year, 1 month"
+title = "Systems Developer / Programmer"
+period = "Aug 2014 – Aug 2015"
+bullets = [
+    "Product catalogue with integration to sales platform",
+    "Building Docker images",
+    "Performance testing",
+]
+
+[[experience]]
+company = "TV2 Danmark"
+duration = "2 years, 8 months"
+title = "Web Developer"
+period = "Jan 2012 – Aug 2014"
+description = "Implementation of portal in Drupal."
+bullets = [
+    "Integration with Teletext",
+    "Integration with Twitter",
+    "Breaking news bar",
+]
+
+[[experience]]
+company = "MOC Systems"
+duration = "3 years, 10 months"
+title = "Web Developer"
+period = "Jan 2008 – Oct 2011"
+description = "Implementation of websites in TYPO3."
+bullets = [
+    "SMK",
+    "Venstre",
+    "Red Barnet",
+]
+
+[[experience]]
+company = "Topdanmark"
+duration = "2 years, 1 month"
+title = "Web Developer"
+period = "Jan 2006 – Jan 2008"
+bullets = [
+    "In-house MVC system bridging TYPO3 and a sales platform",
+]
+
+[[experience]]
+company = "WebmindIT"
+duration = "1 year, 1 month"
+title = "Web Developer"
+period = "Jan 2005 – Jan 2006"
+description = "Sales platform for newspaper BT."
+bullets = [
+    "Interface in XULRunner",
+    "Plugin for XULRunner with TAPICOM integration",
+    "Administration module",
+]
+
+[[experience]]
+company = "AK Techotel"
+duration = "1 year"
+title = "Systems Developer"
+period = "Jan 2004 – Dec 2004"
+bullets = [
+    "Statistics module for Picasso hotel CRM system",
+    "XQuery interface for Eniro",
+    "SOAP interface for hospital patient hotel",
+]
+
+[[education]]
+institution = "Pearson"
+duration = "1 year, 1 month"
+degree = "AWS Certified Solutions Architect – Associate"
+period = "2020 – Jan 2021"
+bullets = [
+    "Earners of this certification have a comprehensive understanding of AWS services and technologies.",
+]
+
+[[education]]
+institution = "RUC"
+duration = "3 years, 11 months"
+degree = "Bachelor of Computer Science"
+period = "Aug 2002 – Jun 2006"
+bullets = [
+    "Linear algebra",
+    "Wrote a game in Java",
+]
+
+[[education]]
+institution = "Niels Brock"
+duration = "2 years, 5 months"
+degree = "Computer Science Technologist (Datamatiker)"
+period = "Jan 2000 – May 2002"
+bullets = [
+    "Wrote a distribution system for DHL-Stafetten",
+    "Placement of groups in tents",
+]

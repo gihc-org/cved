@@ -26,7 +26,7 @@
 
     <!-- Contact -->
     <div class="sidebar-section">
-      <div class="sidebar-section-title">Kontakt</div>
+      <div class="sidebar-section-title">{{ labels.contact }}</div>
       <div class="contact-item"><span class="icon">✉</span> {{ cv.personal.email }}</div>
       <div class="contact-item"><span class="icon">☎</span> {{ cv.personal.phone }}</div>
       <div class="contact-item"><span class="icon">⌂</span> {{ cv.personal.address }}</div>
@@ -34,7 +34,7 @@
 
     <!-- Languages -->
     <div class="sidebar-section">
-      <div class="sidebar-section-title">Sprog</div>
+      <div class="sidebar-section-title">{{ labels.languages }}</div>
       {% for lang in cv.languages %}
       <div class="lang-row">
         <span class="lang-name">{{ lang.name }}</span>
@@ -49,7 +49,7 @@
 
     <!-- Skills -->
     <div class="sidebar-section">
-      <div class="sidebar-section-title">Kompetencer</div>
+      <div class="sidebar-section-title">{{ labels.skills }}</div>
       <div class="skills-grid">
         {% for skill in cv.skills.tags %}
           <span class="skill-tag">{{ skill }}</span>
@@ -59,7 +59,7 @@
 
     <!-- About -->
     <div class="sidebar-section">
-      <div class="sidebar-section-title">Om mig</div>
+      <div class="sidebar-section-title">{{ labels.about }}</div>
       <p class="about-text">{{ cv.about.text.strip() }}</p>
     </div>
 
@@ -75,7 +75,7 @@
 
     <!-- Experience -->
     <div class="section">
-      <div class="section-title">Joberfaring</div>
+      <div class="section-title">{{ labels.experience }}</div>
       <div class="timeline">
         {% for job in cv.experience %}
         <div class="timeline-entry">
@@ -104,7 +104,7 @@
 
     <!-- Education -->
     <div class="section">
-      <div class="section-title">Uddannelse</div>
+      <div class="section-title">{{ labels.education }}</div>
       <div class="timeline">
         {% for edu in cv.education %}
         <div class="timeline-entry">

@@ -170,6 +170,15 @@
     /* Collapsible entries */
     .entry-toggle { cursor: pointer; user-select: none; }
     .entry-body { }
+
+    /* Language switcher */
+    .lang-switch { display: flex; gap: 6px; padding: 12px 20px 8px; }
+    .lang-btn {
+      padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;
+      text-decoration: none; color: #bdc3c7; border: 1px solid rgba(255,255,255,0.15);
+    }
+    .lang-btn:hover { color: #fff; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3); }
+    .lang-btn.lang-active { color: #fff; background: var(--accent); border-color: var(--accent); }
   </style>
 </head>
 <body>
@@ -178,6 +187,10 @@
   <!-- Sidenav -->
   <nav class="sidenav">
     <h2>CV Editor</h2>
+    <div class="lang-switch">
+      <a href="/?lang=da" class="lang-btn {% if lang == 'da' %}lang-active{% endif %}">🇩🇰 DA</a>
+      <a href="/?lang=en" class="lang-btn {% if lang == 'en' %}lang-active{% endif %}">🇬🇧 EN</a>
+    </div>
     <a href="#personal">Personlig info</a>
     <a href="#summary">Profiltekst</a>
     <a href="#about">Om mig</a>
@@ -185,6 +198,7 @@
     <a href="#skills">Kompetencer</a>
     <a href="#experience">Joberfaring</a>
     <a href="#education">Uddannelse</a>
+    <a href="/versions" style="margin-top:12px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">📂 Versioner</a>
   </nav>
 
   <!-- Main content -->
@@ -193,7 +207,7 @@
     <div class="topbar">
       <h1>✏️ Rediger CV</h1>
       <div class="btn-group">
-        <a href="/preview" target="_blank" class="btn btn-outline">👁 Preview</a>
+        <a href="/preview?lang={{ lang }}" target="_blank" class="btn btn-outline">👁 Preview</a>
         <button form="cv-form" type="submit" class="btn btn-primary">💾 Gem</button>
       </div>
     </div>
@@ -203,6 +217,7 @@
     {% endif %}
 
     <form id="cv-form" method="POST" action="/save" enctype="multipart/form-data">
+      <input type="hidden" name="lang" value="{{ lang }}">
       <input type="hidden" name="personal_photo_crop" id="crop-data" value="">
 
       <!-- Personal -->
@@ -463,10 +478,11 @@
 <!-- Download bar -->
 <div class="download-bar">
   <span>Download:</span>
-  <a href="/download/pdf" class="btn btn-primary btn-sm">📄 PDF</a>
-  <a href="/download/docx" class="btn btn-secondary btn-sm">📝 DOCX</a>
-  <a href="/download/odf" class="btn btn-secondary btn-sm">📋 ODF</a>
-  <a href="/preview" target="_blank" class="btn btn-outline btn-sm" style="color:#bdc3c7;border-color:#bdc3c7">👁 Preview</a>
+  <a href="/download/pdf?lang={{ lang }}" class="btn btn-primary btn-sm">📄 PDF</a>
+  <a href="/download/docx?lang={{ lang }}" class="btn btn-secondary btn-sm">📝 DOCX</a>
+  <a href="/download/odf?lang={{ lang }}" class="btn btn-secondary btn-sm">📋 ODF</a>
+  <a href="/preview?lang={{ lang }}" target="_blank" class="btn btn-outline btn-sm" style="color:#bdc3c7;border-color:#bdc3c7">👁 Preview</a>
+  <button type="button" onclick="openVersionModal()" class="btn btn-sm" style="background:#27ae60;color:white;margin-left:8px;">💾 Gem version</button>
 </div>
 
 <!-- Kamera modal -->
@@ -496,6 +512,30 @@
       <button type="button" onclick="cancelCrop()" class="btn btn-secondary">Annuller</button>
       <button type="button" onclick="confirmCrop()" class="btn btn-primary">Gem udskæring</button>
     </div>
+  </div>
+</div>
+
+<!-- Gem version modal -->
+<div id="version-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:12px;padding:24px;width:420px;max-width:90vw;">
+    <h3 style="margin:0 0 16px;font-size:16px;color:#2c3e50;">💾 Gem version</h3>
+    <form method="POST" action="/save-version">
+      <input type="hidden" name="lang" value="{{ lang }}">
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:5px;">Stilling / ansøgning *</label>
+        <input type="text" name="_job" required placeholder="fx Novo Nordisk – Senior DevOps Engineer"
+          style="width:100%;padding:8px 12px;border:1.5px solid #dee2e6;border-radius:6px;font-size:14px;box-sizing:border-box;font-family:inherit;">
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="font-size:12px;font-weight:600;color:#6c757d;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:5px;">Note (valgfri)</label>
+        <textarea name="_note" rows="3" placeholder="Tilpasninger, kontaktperson, indledning..."
+          style="width:100%;padding:8px 12px;border:1.5px solid #dee2e6;border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box;resize:vertical;"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button type="button" onclick="closeVersionModal()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;background:#6c757d;color:white;">Annuller</button>
+        <button type="submit" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;background:#27ae60;color:white;">Gem version</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -650,7 +690,17 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('camera-modal').addEventListener('click', function(e) {
     if (e.target === this) closeCamera();
   });
+  document.getElementById('version-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeVersionModal();
+  });
 });
+
+function openVersionModal() {
+  document.getElementById('version-modal').style.display = 'flex';
+}
+function closeVersionModal() {
+  document.getElementById('version-modal').style.display = 'none';
+}
 
 function addLang() {
   const div = document.createElement('div');

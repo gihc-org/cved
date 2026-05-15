@@ -4,7 +4,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
 from docx import Document
-from docx.shared import Pt, RGBColor, Cm, Inches
+from docx.shared import Pt, RGBColor, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
@@ -13,23 +13,51 @@ BASE = Path(__file__).parent
 TEMPLATES = BASE / "templates"
 OUTPUT = BASE / "output"
 
+LABELS = {
+    "da": {
+        "contact": "Kontakt",
+        "languages": "Sprog",
+        "skills": "Kompetencer",
+        "about": "Om mig",
+        "experience": "Joberfaring",
+        "education": "Uddannelse",
+        "profile": "Profil",
+    },
+    "en": {
+        "contact": "Contact",
+        "languages": "Languages",
+        "skills": "Skills",
+        "about": "About me",
+        "experience": "Work experience",
+        "education": "Education",
+        "profile": "Profile",
+    },
+}
 
-def load_cv() -> dict:
-    with open(BASE / "cv.toml", "rb") as f:
+
+def strip_meta(cv: dict) -> dict:
+    return {k: v for k, v in cv.items() if not k.startswith("_")}
+
+
+def load_cv(path: Path | None = None) -> dict:
+    with open(path or BASE / "cv.toml", "rb") as f:
         return tomllib.load(f)
 
 
 def render_html(cv: dict) -> str:
+    cv = strip_meta(cv)
+    lang = cv.get("lang", "da")
+    labels = LABELS.get(lang, LABELS["da"])
     env = Environment(loader=FileSystemLoader(str(TEMPLATES)))
     tmpl = env.get_template("cv.html")
-    return tmpl.render(cv=cv)
+    return tmpl.render(cv=cv, labels=labels)
 
 
-def to_pdf(cv: dict) -> Path:
+def to_pdf(cv: dict, out_path: Path | None = None) -> Path:
     html_str = render_html(cv)
     css_path = TEMPLATES / "cv.css"
-    out = OUTPUT / "cv.pdf"
-    OUTPUT.mkdir(exist_ok=True)
+    out = out_path or OUTPUT / "cv.pdf"
+    out.parent.mkdir(parents=True, exist_ok=True)
     HTML(string=html_str, base_url=str(BASE)).write_pdf(
         str(out),
         stylesheets=[CSS(filename=str(css_path))],
@@ -53,11 +81,14 @@ def _set_para_spacing(para, before=0, after=0):
     para.paragraph_format.space_after = Pt(after)
 
 
-def to_docx(cv: dict) -> Path:
+def to_docx(cv: dict, out_path: Path | None = None) -> Path:
+    cv = strip_meta(cv)
+    lang = cv.get("lang", "da")
+    labels = LABELS.get(lang, LABELS["da"])
     doc = Document()
-    OUTPUT.mkdir(exist_ok=True)
+    out = out_path or OUTPUT / "cv.docx"
+    out.parent.mkdir(parents=True, exist_ok=True)
 
-    # Page margins
     for section in doc.sections:
         section.top_margin = Cm(2)
         section.bottom_margin = Cm(2)
@@ -65,22 +96,18 @@ def to_docx(cv: dict) -> Path:
         section.right_margin = Cm(2.5)
 
     p = cv["personal"]
-    # Name
     name_para = doc.add_paragraph()
     _set_para_spacing(name_para, after=2)
     _add_run(name_para, p["name"], bold=True, size=22)
 
-    # Title
     title_para = doc.add_paragraph()
     _set_para_spacing(title_para, after=4)
     _add_run(title_para, p["title"], size=14, color=(70, 130, 180))
 
-    # Contact
     contact = doc.add_paragraph()
     _set_para_spacing(contact, after=8)
     _add_run(contact, f"{p['email']}  |  {p['phone']}  |  {p['address']}", size=10)
 
-    # Photo
     if p.get("photo"):
         photo_file = BASE / p["photo"]
         if photo_file.exists():
@@ -90,26 +117,22 @@ def to_docx(cv: dict) -> Path:
             run = photo_para.add_run()
             run.add_picture(str(photo_file), width=Cm(2.5))
 
-    # Summary
-    doc.add_heading("Profil", level=2)
+    doc.add_heading(labels["profile"], level=2)
     s = doc.add_paragraph(cv["summary"]["text"].strip())
     _set_para_spacing(s, after=8)
 
-    # Skills
-    doc.add_heading("Kompetencer", level=2)
+    doc.add_heading(labels["skills"], level=2)
     skills_para = doc.add_paragraph(", ".join(cv["skills"]["tags"]))
     _set_para_spacing(skills_para, after=8)
 
-    # Languages
-    doc.add_heading("Sprog", level=2)
-    for lang in cv["languages"]:
-        dots = "●" * lang["level"] + "○" * (4 - lang["level"])
+    doc.add_heading(labels["languages"], level=2)
+    for lang_item in cv["languages"]:
+        dots = "●" * lang_item["level"] + "○" * (4 - lang_item["level"])
         lp = doc.add_paragraph()
         _set_para_spacing(lp, after=2)
-        _add_run(lp, f"{lang['name']}  {dots}", size=10)
+        _add_run(lp, f"{lang_item['name']}  {dots}", size=10)
 
-    # Experience
-    doc.add_heading("Joberfaring", level=1)
+    doc.add_heading(labels["experience"], level=1)
     for job in cv["experience"]:
         h = doc.add_paragraph()
         _set_para_spacing(h, before=6, after=0)
@@ -141,8 +164,7 @@ def to_docx(cv: dict) -> Path:
                 bp = doc.add_paragraph(bullet, style="List Bullet")
                 _set_para_spacing(bp, after=1)
 
-    # Education
-    doc.add_heading("Uddannelse", level=1)
+    doc.add_heading(labels["education"], level=1)
     for edu in cv["education"]:
         h = doc.add_paragraph()
         _set_para_spacing(h, before=6, after=0)
@@ -157,7 +179,6 @@ def to_docx(cv: dict) -> Path:
             bp = doc.add_paragraph(bullet, style="List Bullet")
             _set_para_spacing(bp, after=1)
 
-    out = OUTPUT / "cv.docx"
     doc.save(str(out))
     return out
 

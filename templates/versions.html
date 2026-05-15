@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV Versioner</title>
+  <style>
+    :root {
+      --bg: #f8f9fa; --card: #ffffff; --border: #dee2e6;
+      --accent: #3498db; --danger: #e74c3c;
+      --text: #2c3e50; --muted: #6c757d; --sidebar-w: 260px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    .layout { display: flex; min-height: 100vh; }
+    .sidenav {
+      width: var(--sidebar-w); background: #2c3e50; color: #ecf0f1;
+      padding: 20px 0; position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; flex-shrink: 0;
+    }
+    .sidenav h2 { font-size: 14px; padding: 0 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin: 0 0 8px; }
+    .sidenav a {
+      display: block; padding: 9px 20px; color: #bdc3c7;
+      text-decoration: none; font-size: 13px; border-left: 3px solid transparent;
+    }
+    .sidenav a:hover, .sidenav a.active { color: #fff; background: rgba(255,255,255,0.05); border-left-color: var(--accent); }
+    .content { flex: 1; padding: 30px 40px; max-width: 900px; }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border);
+    }
+    .topbar h1 { margin: 0; font-size: 22px; }
+    .btn {
+      padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;
+      font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 6px; transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); }
+    .section-header {
+      font-size: 17px; font-weight: 700; color: var(--text);
+      margin: 28px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .version-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px 20px; margin-bottom: 10px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+    }
+    .version-info { flex: 1; }
+    .version-job { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+    .version-date { font-size: 12px; color: var(--muted); }
+    .version-note { font-size: 13px; color: var(--text); margin-top: 6px; font-style: italic; }
+    .version-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; flex-wrap: wrap; }
+    .empty-state { color: var(--muted); font-size: 14px; padding: 12px 0; }
+    .flash { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+    .flash-success { background: #d5f5e3; color: #1e8449; border: 1px solid #a9dfbf; }
+    .flash-error { background: #fadbd8; color: #922b21; border: 1px solid #f1948a; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidenav">
+    <h2>CV Editor</h2>
+    <a href="/?lang=da">✏️ Dansk CV</a>
+    <a href="/?lang=en">✏️ English CV</a>
+    <a href="/versions" class="active">📂 Versioner</a>
+  </nav>
+
+  <div class="content">
+    <div class="topbar">
+      <h1>📂 Versionshistorik</h1>
+    </div>
+
+    {% if flash %}
+    <div class="flash flash-{{ flash.type }}">{{ flash.message }}</div>
+    {% endif %}
+
+    <div class="section-header">🇩🇰 Dansk</div>
+    {% if versions_da %}
+      {% for v in versions_da %}
+      <div class="version-card">
+        <div class="version-info">
+          <div class="version-job">{{ v.job }}</div>
+          <div class="version-date">{{ v.date }}</div>
+          {% if v.note %}<div class="version-note">{{ v.note }}</div>{% endif %}
+        </div>
+        <div class="version-actions">
+          <a href="/versions/da/{{ v.filename }}/preview" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
+          <a href="/versions/da/{{ v.filename }}/download/pdf" class="btn btn-primary btn-sm">📄 PDF</a>
+          <a href="/versions/da/{{ v.filename }}/download/docx" class="btn btn-secondary btn-sm">📝 DOCX</a>
+          <form method="POST" action="/versions/da/{{ v.filename }}/restore" style="display:inline-block">
+            <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Gendan som aktivt dansk CV?')">↩ Gendan</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="empty-state">Ingen gemte versioner endnu.</p>
+    {% endif %}
+
+    <div class="section-header">🇬🇧 English</div>
+    {% if versions_en %}
+      {% for v in versions_en %}
+      <div class="version-card">
+        <div class="version-info">
+          <div class="version-job">{{ v.job }}</div>
+          <div class="version-date">{{ v.date }}</div>
+          {% if v.note %}<div class="version-note">{{ v.note }}</div>{% endif %}
+        </div>
+        <div class="version-actions">
+          <a href="/versions/en/{{ v.filename }}/preview" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
+          <a href="/versions/en/{{ v.filename }}/download/pdf" class="btn btn-primary btn-sm">📄 PDF</a>
+          <a href="/versions/en/{{ v.filename }}/download/docx" class="btn btn-secondary btn-sm">📝 DOCX</a>
+          <form method="POST" action="/versions/en/{{ v.filename }}/restore" style="display:inline-block">
+            <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Restore as active English CV?')">↩ Restore</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="empty-state">No saved versions yet.</p>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>
