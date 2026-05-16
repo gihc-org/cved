@@ -28,3 +28,13 @@
   - [x] Preview/PDF/DOCX-knapper på hver version i `/versions`-siden
   - [x] "Gendan"-knap der kopierer en version til den aktive `cv.toml` / `cv-en.toml`
   - [x] Auto-gem kladde ved gendan: aktive CV gemmes som `kladde.toml` inden overskrivning, vises øverst i /versions med orange badge
+
+- [x] **Rediger metadata på gemte versioner**
+  - [x] Ny POST-endpoint `/versions/{lang}/{filename}/update-meta` der opdaterer `_job`, `_note` og `_application` i version-filen uden at gendanne den
+  - [x] Inline redigeringsformular på hvert versionskort i `versions.html`
+
+- [x] **Ansøgning-felt på gemte versioner**
+  - [x] Nyt metadatafelt `_application` i version-TOML (adskilt fra `_note`)
+  - [x] Tekstfelt i "Gem version"-modal i `edit.html`
+  - [x] Vis indikator på versionskort hvis ansøgning er gemt
+  - [x] Redigerbar via inline-formularen (se ovenfor)

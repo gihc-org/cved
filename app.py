@@ -69,6 +69,7 @@ def list_versions(lang: str) -> list[dict]:
                     "filename": f.name,
                     "job": data.get("_job", "Kladde"),
                     "note": data.get("_note", ""),
+                    "application": data.get("_application", ""),
                     "date": "",
                     "is_kladde": True,
                 }
@@ -77,6 +78,7 @@ def list_versions(lang: str) -> list[dict]:
                     "filename": f.name,
                     "job": data.get("_job", f.stem),
                     "note": data.get("_note", ""),
+                    "application": data.get("_application", ""),
                     "date": f.stem[:10],
                     "is_kladde": False,
                 })
@@ -278,9 +280,12 @@ async def save_version_endpoint(request: Request):
     job = (form.get("_job") or "").strip()
     note = (form.get("_note") or "").strip()
 
+    application = (form.get("_application") or "").strip()
+
     cv = load_cv(lang)
     cv["_job"] = job
     cv["_note"] = note
+    cv["_application"] = application
 
     slug = re.sub(r"[^a-z0-9]+", "-", job.lower())[:40].strip("-") or "version"
     filename = f"{date.today().isoformat()}_{slug}.toml"
@@ -291,6 +296,29 @@ async def save_version_endpoint(request: Request):
         tomli_w.dump(cv, f)
 
     _flash = {"type": "success", "message": f"Version gemt: {filename}"}
+    return RedirectResponse("/versions", status_code=303)
+
+
+@app.post("/versions/{lang}/{filename}/update-meta")
+async def update_version_meta(lang: str, filename: str, request: Request):
+    global _flash
+    version_path = BASE / "versions" / lang / filename
+    if not version_path.exists():
+        return HTMLResponse("Version ikke fundet", status_code=404)
+    form = await request.form()
+    job = (form.get("_job") or "").strip()
+    note = (form.get("_note") or "").strip()
+    application = (form.get("_application") or "").strip()
+
+    with open(version_path, "rb") as f:
+        cv = tomllib.load(f)
+    cv["_job"] = job
+    cv["_note"] = note
+    cv["_application"] = application
+    with open(version_path, "wb") as f:
+        tomli_w.dump(cv, f)
+
+    _flash = {"type": "success", "message": f"Metadata opdateret: {filename}"}
     return RedirectResponse("/versions", status_code=303)
 
 

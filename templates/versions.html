@@ -61,9 +61,31 @@
       font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px;
       text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
     }
+    .badge-application {
+      display: inline-block; background: #2980b9; color: white;
+      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px;
+      letter-spacing: 0.5px; margin-left: 6px;
+    }
     .flash { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
     .flash-success { background: #d5f5e3; color: #1e8449; border: 1px solid #a9dfbf; }
     .flash-error { background: #fadbd8; color: #922b21; border: 1px solid #f1948a; }
+    .version-card { flex-wrap: wrap; }
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 1000; align-items: center; justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: white; border-radius: 12px; padding: 24px; width: 500px;
+      max-width: 92vw; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-box h3 { margin: 0 0 16px; font-size: 16px; color: var(--text); }
+    .modal-box label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+    .modal-box input, .modal-box textarea {
+      width: 100%; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 6px;
+      font-size: 14px; font-family: inherit; box-sizing: border-box; margin-bottom: 12px;
+    }
+    .modal-box textarea { resize: vertical; }
   </style>
 </head>
 <body>
@@ -90,7 +112,7 @@
       <div class="version-card {% if v.is_kladde %}kladde-card{% endif %}">
         <div class="version-info">
           {% if v.is_kladde %}<div><span class="badge-kladde">{{ v.job }}</span></div>
-          {% else %}<div class="version-job">{{ v.job }}</div>{% endif %}
+          {% else %}<div class="version-job">{{ v.job }}{% if v.application %}<span class="badge-application">📝 Ansøgning</span>{% endif %}</div>{% endif %}
           {% if v.date %}<div class="version-date">{{ v.date }}</div>{% endif %}
           {% if v.note %}<div class="version-note">{{ v.note }}</div>{% endif %}
         </div>
@@ -98,6 +120,11 @@
           <a href="/versions/da/{{ v.filename }}/preview" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
           <a href="/versions/da/{{ v.filename }}/download/pdf" class="btn btn-primary btn-sm">📄 PDF</a>
           <a href="/versions/da/{{ v.filename }}/download/docx" class="btn btn-secondary btn-sm">📝 DOCX</a>
+          <button type="button" class="btn btn-outline btn-sm" onclick="openEditModal(this)"
+            data-action="/versions/da/{{ v.filename }}/update-meta"
+            data-job="{{ v.job|e }}"
+            data-note="{{ v.note|e }}"
+            data-application="{{ v.application|e }}">✏️ Redigér</button>
           <form method="POST" action="/versions/da/{{ v.filename }}/restore" style="display:inline-block">
             <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Gendan som aktivt dansk CV?')">↩ Gendan</button>
           </form>
@@ -114,7 +141,7 @@
       <div class="version-card {% if v.is_kladde %}kladde-card{% endif %}">
         <div class="version-info">
           {% if v.is_kladde %}<div><span class="badge-kladde">{{ v.job }}</span></div>
-          {% else %}<div class="version-job">{{ v.job }}</div>{% endif %}
+          {% else %}<div class="version-job">{{ v.job }}{% if v.application %}<span class="badge-application">📝 Application</span>{% endif %}</div>{% endif %}
           {% if v.date %}<div class="version-date">{{ v.date }}</div>{% endif %}
           {% if v.note %}<div class="version-note">{{ v.note }}</div>{% endif %}
         </div>
@@ -122,6 +149,11 @@
           <a href="/versions/en/{{ v.filename }}/preview" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
           <a href="/versions/en/{{ v.filename }}/download/pdf" class="btn btn-primary btn-sm">📄 PDF</a>
           <a href="/versions/en/{{ v.filename }}/download/docx" class="btn btn-secondary btn-sm">📝 DOCX</a>
+          <button type="button" class="btn btn-outline btn-sm" onclick="openEditModal(this)"
+            data-action="/versions/en/{{ v.filename }}/update-meta"
+            data-job="{{ v.job|e }}"
+            data-note="{{ v.note|e }}"
+            data-application="{{ v.application|e }}">✏️ Edit</button>
           <form method="POST" action="/versions/en/{{ v.filename }}/restore" style="display:inline-block">
             <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Restore as active English CV?')">↩ Restore</button>
           </form>
@@ -133,5 +165,39 @@
     {% endif %}
   </div>
 </div>
+
+<div id="edit-modal" class="modal-backdrop">
+  <div class="modal-box">
+    <h3>✏️ Redigér version</h3>
+    <form id="edit-modal-form" method="POST" action="">
+      <label>Stilling / ansøgning</label>
+      <input type="text" id="edit-job" name="_job" required>
+      <label>Note</label>
+      <textarea id="edit-note" name="_note" rows="2"></textarea>
+      <label>Ansøgning</label>
+      <textarea id="edit-application" name="_application" rows="8"></textarea>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeEditModal()">Annuller</button>
+        <button type="submit" class="btn btn-primary btn-sm">Gem ændringer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openEditModal(btn) {
+  document.getElementById('edit-modal-form').action = btn.dataset.action;
+  document.getElementById('edit-job').value = btn.dataset.job;
+  document.getElementById('edit-note').value = btn.dataset.note;
+  document.getElementById('edit-application').value = btn.dataset.application;
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+}
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
+</script>
 </body>
 </html>
