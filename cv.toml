@@ -1,3 +1,4 @@
+lang = "da"
 languages = [
     { name = "Dansk", level = 4 },
     { name = "Engelsk", level = 3 },
@@ -9,10 +10,10 @@ title = "Systemudvikler"
 email = "kristian.n.jensen@gmail.com"
 phone = "52699443"
 address = "Krudttårnsvej 121, 2791 Dragør"
-photo = "static/photo_df7a3af8.png"
+photo = "static/photo_9fa0830d.jpg"
 
 [summary]
-text = "Jeg arbejder med DevOps og cloud-baserede løsninger med fokus på stabil drift, sikkerhed og effektiv levering. Med solid erfaring fra AWS og Infrastructure as Code (IaC) har jeg automatiseret og standardiseret infrastruktur for at reducere time-to-market og understøtte agile arbejdsmetoder. Jeg har arbejdet med monitorering, adgangsstyring og drift i miljøer med høje krav til compliance og informationssikkerhed. Samtidig har jeg fokus på at omsætte min cloud-erfaring til Azure-baserede platforme. Jeg motiveres af at skabe løsninger, der forbedrer brugeroplevelsen og styrker IT som en integreret del af forretningen."
+text = "Jeg arbejder med drift, udvikling og automatisering af infrastrukturløsninger med fokus på stabile platforme, Linux-baserede servermiljøer og effektive driftsprocesser. Gennem flere år har jeg arbejdet med både on-prem og cloud-baserede miljøer, hvor jeg blandt andet har arbejdet med Infrastructure as Code (IaC), CI/CD, virtualisering og deployment af shared services.\r\n\r\nJeg har erfaring med drift og automatisering i miljøer med høje krav til stabilitet, sikkerhed og standardisering og motiveres af at skabe løsninger, der gør drift mere robust og hverdagen lettere for både brugere og kolleger. Samtidig lægger jeg stor vægt på samarbejde, vidensdeling og ansvarlighed og har blandt andet fungeret som mentor for nyansatte og studentermedhjælpere.\r\n\r\nTeknisk har jeg primært arbejdet med Linux, AWS, Terraform, Jenkins, Docker og automatisering, men jeg trives generelt i komplekse infrastrukturlandskaber og sætter mig hurtigt ind i nye teknologier og platforme."
 
 [about]
 text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
@@ -51,6 +52,7 @@ tags = [
     "SonarQube",
     "terraform",
     "Typo3",
+    "VMware",
 ]
 
 [[experience]]
