@@ -1,0 +1,243 @@
+lang = "da"
+languages = [
+    { name = "Dansk", level = 4 },
+    { name = "Engelsk", level = 3 },
+]
+_job = "Koncern IT - Webudvikler"
+_note = ""
+_application = "Kære Koncern IT\r\n\r\nJeg ønsker at søge stillingen som webudvikler i Team Web og Intra hos Koncern IT.\r\n\r\nDet er især kombinationen af webudvikling, samarbejde og drift af større platforme, der gør stillingen interessant for mig. Jeg har gennem mere end 15 år arbejdet med udvikling af web- og infrastrukturløsninger og har erfaring med både CMS-platforme, integrationer, automatisering og drift i miljøer med høje krav til stabilitet og kvalitet.\r\n\r\nJeg har blandt andet arbejdet flere år med Drupal hos TV2, hvor jeg var med til at udvikle portal-løsninger og integrationer til blandt andet Teletext og Twitter. Derudover har jeg tidligere arbejdet med TYPO3-baserede løsninger for både offentlige og private organisationer. Selvom min erfaring med Drupal primært er fra version 8, har jeg generelt stor erfaring med webplatforme og sætter mig hurtigt ind i nye teknologier og arbejdsgange.\r\n\r\nDe senere år har jeg arbejdet bredere med DevOps, cloud og Infrastructure as Code hos blandt andet Udviklings- og Forenklingsstyrelsen, Cybercom og JYSK. Her har jeg arbejdet med Linux, AWS, Kubernetes, Terraform, Jenkins og automatisering af deployments og driftsprocesser. Jeg oplever, at denne erfaring giver mig en god forståelse for hele livscyklussen omkring moderne webplatforme – fra udvikling til drift og stabil levering.\r\n\r\nSamtidig lægger jeg stor vægt på samarbejde og vidensdeling. Hos Udviklings- og Forenklingsstyrelsen fungerede jeg som mentor for både nyansatte og studentermedhjælpere i forbindelse med onboarding og faglig sparring. Jeg trives godt i teams, hvor man hjælper hinanden og løfter opgaverne i fællesskab.\r\n\r\nJeg ser Koncern IT som en spændende arbejdsplads med fokus på både faglighed og samfundsværdi, og jeg vil gerne bidrage med min erfaring inden for webudvikling, drift og samarbejde.\r\n\r\nJeg ser frem til muligheden for at uddybe min motivation og erfaring ved en samtale.\r\n\r\nMed venlig hilsen\r\nKristian Nygaard Jensen"
+
+[personal]
+name = "Kristian Nygaard Jensen"
+title = "Systemudvikler"
+email = "kristian.n.jensen@gmail.com"
+phone = "52699443"
+address = "Krudttårnsvej 121, 2791 Dragør"
+photo = "static/photo_9fa0830d.jpg"
+
+[summary]
+text = "Webudvikler og systemudvikler med mere end 15 års erfaring inden for udvikling, integration og drift af webplatforme og infrastrukturløsninger. Jeg har gennem flere år arbejdet med CMS-platforme som Drupal og TYPO3 samt udvikling af stabile og brugervenlige løsninger i samarbejde med både udviklere, drift og forretning.\r\n\r\nHos TV2 arbejdede jeg med udvikling i Drupal 8 og integrationer til blandt andet Teletext og Twitter, mens jeg senere har specialiseret mig i automatisering, cloud og Infrastructure as Code på både AWS og Kubernetes-platforme. Jeg trives i komplekse miljøer med høje krav til stabilitet, samarbejde og vidensdeling og har blandt andet fungeret som mentor for nyansatte og studentermedhjælpere.\r\n\r\nJeg motiveres af at skabe løsninger, der både er teknisk robuste og giver værdi for brugerne, samtidig med at jeg bidrager til et godt samarbejde i teamet."
+
+[about]
+text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
+
+[skills]
+tags = [
+    "Ansible",
+    "Artifactory",
+    "aws cloud",
+    "Azure DevOps",
+    "Bash",
+    "CentOS",
+    "Cerebro",
+    "Clojure",
+    "ClojureScript",
+    "Delphi",
+    "Docker",
+    "Drupal",
+    "fluentd",
+    "gocd",
+    "go test",
+    "HTML + CSS",
+    "JavaScript",
+    "Jenkins",
+    "Kibana",
+    "kubernetes",
+    "Marathon",
+    "Mesos",
+    "MSSQL",
+    "MySQL",
+    "NodeJS",
+    "PHP",
+    "PostgreSQL",
+    "rancher",
+    "SOAP",
+    "SonarQube",
+    "terraform",
+    "Typo3",
+    "VMware",
+]
+
+[[experience]]
+company = "JYSK A/S"
+duration = "5 måneder"
+title = "DevOps"
+period = "feb. 2023 – jun. 2023"
+type = "Konsulent"
+bullets = [
+    "Implementering af pipelines i Jenkins",
+    "Vedligeholdelse af Jenkins",
+    "Vedligeholdelse af virtuelle maskiner",
+    "Vedligeholde AWX projekter",
+    "Opbygning af docker images",
+]
+
+[[experience]]
+company = "0071"
+duration = "9 måneder"
+title = "Software Developer"
+period = "maj 2022 – jan. 2023"
+description = "Implementering af publiseringsplatform (Zero Status)."
+bullets = [
+    "Applikation udviklet i Node.js",
+    "Dokumenter gemt på IPFS",
+]
+
+[[experience]]
+company = "Cybercom"
+duration = "1 år, 7 måneder"
+title = "DevOps Engineer"
+period = "okt. 2020 – apr. 2022"
+description = "Infrastrukture R&D. Deployment via CDK og terraform."
+
+[[experience.subsections]]
+heading = "Konsulent hos COOP via Cybercom/KnowIT"
+bullets = [
+    "Implementerede logging-infrastruktur",
+    "Rancher",
+    "Cerebro, Elasticsearch / Kibana, Fluentd",
+    "Terraform",
+    "Opbygning af docker images",
+]
+
+[[experience.subsections]]
+heading = "Konsulent hos Ørsted via Cybercom/KnowIT"
+bullets = [
+    "Implementerede virtuelle ressourcer på Azure platformen",
+    "Deployment af applikationer via Azure DevOps",
+    "Planlægning af udruldning af kubernetes (AKS)",
+]
+
+[[experience]]
+company = "Udviklings- og Forenklingsstyrelsen"
+duration = "5 år, 1 måned"
+title = "Chefkonsulent"
+period = "aug. 2015 – aug. 2020"
+
+[[experience.subsections]]
+heading = "Fase 1: On-Prem"
+bullets = [
+    "IaC deployment af on-prem cloud bygget på Mesos/Marathon ved brug af Ansible",
+    "Udvikling og vedligeholdelse af Linux-baserede servere (Ubuntu)",
+    "Opbygning af docker images",
+    "Automatisering af processer og deployment pipelines i Jenkins og GoCD",
+    "Import af BBR data til DataStax Graph (DSG)",
+    "Medvirkede til tekniskafsnit af offentligt cloud udbud",
+    "Implementeret brugergrænseflade komponenter i ClojureScript/Reagent",
+]
+
+[[experience.subsections]]
+heading = "Fase 2: AWS"
+bullets = [
+    "IaC deployment af shared services (Jenkins, SonarQube, AD spejl) på AWS via Terraform",
+    "Udvikling og vedligeholdelse af Linux-baserede servere (EC2, CentOS)",
+    "Implementering af firewall-regler herunder securitygroups",
+    "Implementering af dokumentkø bygget på SQS, SNS og serverless funktioner",
+    "Automatisering af processer og deployment pipelines i Jenkins",
+    "Opbygning af docker images",
+]
+
+[[experience.subsections]]
+heading = "Fase 3: Kubernetes"
+bullets = [
+    "IaC deployment af shared services (Jenkins, SonarQube, AD spejl) på Kubernetes (EKS) via Terraform",
+    "Automatisering af processer og deployment pipelines i Jenkins",
+    "Opbygning af docker images",
+    "GitOps pipelines i Atlantis",
+]
+
+[[experience]]
+company = "YouSee A/S"
+duration = "1 år, 1 måned"
+title = "Systemudvikler/Programmør"
+period = "aug. 2014 – aug. 2015"
+bullets = [
+    "Produktkatalog med integration til salgsplatform",
+    "Opbygning af docker images",
+    "Performancetest",
+]
+
+[[experience]]
+company = "TV2 Danmark"
+duration = "2 år, 8 måneder"
+title = "Webudvikler"
+period = "jan. 2012 – aug. 2014"
+description = "Implementering af portal i Drupal."
+bullets = [
+    "Integration til Teletext",
+    "Integration til Twitter",
+    "Breakingbar",
+]
+
+[[experience]]
+company = "MOC Systems"
+duration = "3 år, 10 måneder"
+title = "Webudvikler"
+period = "jan. 2008 – okt. 2011"
+description = "Implementering af hjemmesider i TYPO3."
+bullets = [
+    "SMK",
+    "Venstre",
+    "Red barnet",
+]
+
+[[experience]]
+company = "Topdanmark"
+duration = "2 år, 1 måned"
+title = "Webudvikler"
+period = "jan. 2006 – jan. 2008"
+bullets = [
+    "Egenudviklet MVC-system mellem TYPO3 og salgsplatform",
+]
+
+[[experience]]
+company = "WebmindIT"
+duration = "1 år, 1 måned"
+title = "Webudvikler"
+period = "jan. 2005 – jan. 2006"
+description = "Salgsplatform til aviser BT."
+bullets = [
+    "Interface i XULRunner",
+    "Plugin til XULRunner med integration til TAPICOM",
+    "Administrationsmodul",
+]
+
+[[experience]]
+company = "AK Techotel"
+duration = "1 år"
+title = "Systemudvikler"
+period = "jan. 2004 – dec. 2004"
+bullets = [
+    "Statistik modul til Picasso hotel CRM system",
+    "Xquery interface til eniro",
+    "SOAP interface til hospital patient hotel",
+]
+
+[[education]]
+institution = "Pearson"
+duration = "1 år, 1 måned"
+degree = "AWS Certified Solutions Architect – Associate"
+period = "2020 – jan. 2021"
+bullets = [
+    "Earners of this certification have a comprehensive understanding of AWS services and technologies.",
+]
+
+[[education]]
+institution = "RUC"
+duration = "3 år, 11 måneder"
+degree = "Bachelor of Computer Science"
+period = "aug. 2002 – jun. 2006"
+bullets = [
+    "Linear algebra",
+    "Skrev et spil i Java",
+]
+
+[[education]]
+institution = "Niels Brock"
+duration = "2 år, 5 måneder"
+degree = "Datamatiker"
+period = "jan. 2000 – maj 2002"
+bullets = [
+    "Skrev et fordelingssystem til DHL-Stafetten",
+    "Placering af grupper i telte",
+]
