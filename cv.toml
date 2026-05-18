@@ -10,10 +10,10 @@ title = "Systemudvikler"
 email = "kristian.n.jensen@gmail.com"
 phone = "52699443"
 address = "Krudttårnsvej 121, 2791 Dragør"
-photo = "static/photo_9fa0830d.jpg"
+photo = "QmdENpFuHHprY5ijPB6GhtrJpMJVu8cCVuStU5zMitgu4z"
 
 [summary]
-text = "Jeg arbejder med drift, udvikling og automatisering af infrastrukturløsninger med fokus på stabile platforme, Linux-baserede servermiljøer og effektive driftsprocesser. Gennem flere år har jeg arbejdet med både on-prem og cloud-baserede miljøer, hvor jeg blandt andet har arbejdet med Infrastructure as Code (IaC), CI/CD, virtualisering og deployment af shared services.\r\n\r\nJeg har erfaring med drift og automatisering i miljøer med høje krav til stabilitet, sikkerhed og standardisering og motiveres af at skabe løsninger, der gør drift mere robust og hverdagen lettere for både brugere og kolleger. Samtidig lægger jeg stor vægt på samarbejde, vidensdeling og ansvarlighed og har blandt andet fungeret som mentor for nyansatte og studentermedhjælpere.\r\n\r\nTeknisk har jeg primært arbejdet med Linux, AWS, Terraform, Jenkins, Docker og automatisering, men jeg trives generelt i komplekse infrastrukturlandskaber og sætter mig hurtigt ind i nye teknologier og platforme."
+text = "Webudvikler og systemudvikler med mere end 15 års erfaring inden for udvikling, integration og drift af webplatforme og infrastrukturløsninger. Jeg har gennem flere år arbejdet med CMS-platforme som Drupal og TYPO3 samt udvikling af stabile og brugervenlige løsninger i samarbejde med både udviklere, drift og forretning.\r\n\r\nHos TV2 arbejdede jeg med udvikling i Drupal 8 og integrationer til blandt andet Teletext og Twitter, mens jeg senere har specialiseret mig i automatisering, cloud og Infrastructure as Code på både AWS og Kubernetes-platforme. Jeg trives i komplekse miljøer med høje krav til stabilitet, samarbejde og vidensdeling og har blandt andet fungeret som mentor for nyansatte og studentermedhjælpere.\r\n\r\nJeg motiveres af at skabe løsninger, der både er teknisk robuste og giver værdi for brugerne, samtidig med at jeg bidrager til et godt samarbejde i teamet."
 
 [about]
 text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
@@ -53,6 +53,7 @@ tags = [
     "terraform",
     "Typo3",
     "VMware",
+    "jQuery",
 ]
 
 [[experience]]

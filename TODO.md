@@ -38,3 +38,9 @@
   - [x] Tekstfelt i "Gem version"-modal i `edit.html`
   - [x] Vis indikator på versionskort hvis ansøgning er gemt
   - [x] Redigerbar via inline-formularen (se ovenfor)
+
+- [x] **IPFS-storage til profilbilleder**
+  - [x] Upload billede til lokal IPFS-daemon (port 5001) og gem CID i cv.toml
+  - [x] Proxy-endpoint `/ipfs/<cid>` i app.py der henter fra lokal gateway (port 8080)
+  - [x] Rendering: brug proxy-URL i HTML-template og WeasyPrint, download bytes til DOCX
+  - [x] Fjern lagring af billeder i `static/` og git

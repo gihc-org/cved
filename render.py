@@ -1,5 +1,8 @@
+import base64
+import io
 import tomllib
 import subprocess
+import urllib.request
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
@@ -35,8 +38,36 @@ LABELS = {
 }
 
 
+IPFS_GW = "http://localhost:8080"
+
+
 def strip_meta(cv: dict) -> dict:
     return {k: v for k, v in cv.items() if not k.startswith("_")}
+
+
+def _is_cid(photo: str) -> bool:
+    return bool(photo) and "/" not in photo
+
+
+def _fetch_photo_bytes(photo: str) -> bytes | None:
+    """Hent billedbytes fra IPFS-gateway eller lokalt filsystem (bagudkompatibilitet)."""
+    if not photo:
+        return None
+    if not _is_cid(photo):
+        p = BASE / photo
+        return p.read_bytes() if p.exists() else None
+    try:
+        with urllib.request.urlopen(f"{IPFS_GW}/ipfs/{photo}", timeout=15) as r:
+            return r.read()
+    except Exception:
+        return None
+
+
+def _photo_data_url(photo: str) -> str:
+    data = _fetch_photo_bytes(photo)
+    if not data:
+        return ""
+    return "data:image/jpeg;base64," + base64.b64encode(data).decode()
 
 
 def load_cv(path: Path | None = None) -> dict:
@@ -46,6 +77,10 @@ def load_cv(path: Path | None = None) -> dict:
 
 def render_html(cv: dict) -> str:
     cv = strip_meta(cv)
+    cv["personal"] = dict(cv.get("personal", {}))
+    photo = cv["personal"].get("photo", "")
+    if photo:
+        cv["personal"]["photo"] = _photo_data_url(photo)
     lang = cv.get("lang", "da")
     labels = LABELS.get(lang, LABELS["da"])
     env = Environment(loader=FileSystemLoader(str(TEMPLATES)))
@@ -109,13 +144,13 @@ def to_docx(cv: dict, out_path: Path | None = None) -> Path:
     _add_run(contact, f"{p['email']}  |  {p['phone']}  |  {p['address']}", size=10)
 
     if p.get("photo"):
-        photo_file = BASE / p["photo"]
-        if photo_file.exists():
+        photo_bytes = _fetch_photo_bytes(p["photo"])
+        if photo_bytes:
             photo_para = doc.add_paragraph()
             photo_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
             _set_para_spacing(photo_para, after=6)
             run = photo_para.add_run()
-            run.add_picture(str(photo_file), width=Cm(2.5))
+            run.add_picture(io.BytesIO(photo_bytes), width=Cm(2.5))
 
     doc.add_heading(labels["profile"], level=2)
     s = doc.add_paragraph(cv["summary"]["text"].strip())

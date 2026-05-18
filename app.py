@@ -1,15 +1,31 @@
 import base64
 import re
+import subprocess
 import tomllib
 import tomli_w
+import urllib.request
 import uuid
 from datetime import date, datetime
 from pathlib import Path
 from fastapi import FastAPI, Query, Request, UploadFile
-from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from jinja2 import Environment, FileSystemLoader
 import render as cv_render
+
+IPFS_GW = "http://localhost:8080"
+
+
+def ipfs_upload(data: bytes) -> str:
+    result = subprocess.run(
+        ["ipfs", "add", "-q", "--stdin-name", "photo.jpg"],
+        input=data, capture_output=True, check=True,
+    )
+    return result.stdout.decode().strip()
+
+
+def _is_cid(photo: str) -> bool:
+    return bool(photo) and "/" not in photo
 
 BASE = Path(__file__).parent
 app = FastAPI()
@@ -47,11 +63,29 @@ def save_cv(data: dict, lang: str = "da") -> None:
 def _preview_html(cv: dict) -> str:
     import shutil
     shutil.copy(BASE / "templates" / "cv.css", static_dir / "cv.css")
+    cv = dict(cv)
+    cv["personal"] = dict(cv.get("personal", {}))
+    photo = cv["personal"].get("photo", "")
+    if _is_cid(photo):
+        cv["personal"]["photo"] = f"/ipfs/{photo}"
     env = Environment(loader=FileSystemLoader(str(BASE / "templates")))
     tmpl = env.get_template("cv.html")
     cv_lang = cv.get("lang", "da")
     labels = cv_render.LABELS.get(cv_lang, cv_render.LABELS["da"])
     return tmpl.render(cv=cv, css_url="/static/cv.css", labels=labels)
+
+
+@app.get("/ipfs/{cid}")
+def ipfs_proxy(cid: str):
+    if not re.match(r"^[a-zA-Z0-9]+$", cid):
+        return HTMLResponse("Ugyldigt CID", status_code=400)
+    try:
+        with urllib.request.urlopen(f"{IPFS_GW}/ipfs/{cid}", timeout=15) as r:
+            content = r.read()
+            ct = r.headers.get("Content-Type", "image/jpeg")
+        return Response(content=content, media_type=ct)
+    except Exception:
+        return HTMLResponse("Billede ikke tilgængeligt", status_code=502)
 
 
 def list_versions(lang: str) -> list[dict]:
@@ -118,22 +152,15 @@ async def save(request: Request):
     lang = form.get("lang", "da") or "da"
 
     # Handle photo: crop-data (base64 from browser crop tool) takes priority over raw upload
-    photo_path = ""
+    new_cid = ""
     crop_data = form.get("personal_photo_crop", "")
     if crop_data and isinstance(crop_data, str) and crop_data.startswith("data:image"):
         _, encoded = crop_data.split(",", 1)
-        safe_name = f"photo_{uuid.uuid4().hex[:8]}.jpg"
-        dest = static_dir / safe_name
-        dest.write_bytes(base64.b64decode(encoded))
-        photo_path = f"static/{safe_name}"
+        new_cid = ipfs_upload(base64.b64decode(encoded))
     else:
         upload = form.get("personal_photo")
         if upload is not None and hasattr(upload, "filename") and upload.filename:
-            ext = Path(upload.filename).suffix or ".jpg"
-            safe_name = f"photo_{uuid.uuid4().hex[:8]}{ext}"
-            dest = static_dir / safe_name
-            dest.write_bytes(await upload.read())
-            photo_path = f"static/{safe_name}"
+            new_cid = ipfs_upload(await upload.read())
 
     form_dict: dict[str, list[str]] = {}
     for k, v in form.multi_items():
@@ -149,15 +176,10 @@ async def save(request: Request):
 
     cv: dict = {}
 
-    if photo_path:
-        cv_photo = photo_path
+    if new_cid:
+        cv_photo = new_cid
     elif first("remove_photo"):
         cv_photo = ""
-        old = load_cv(lang).get("personal", {}).get("photo", "")
-        if old:
-            old_path = BASE / old
-            if old_path.exists():
-                old_path.unlink()
     else:
         cv_photo = load_cv(lang).get("personal", {}).get("photo", "")
 
