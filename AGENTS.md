@@ -4,12 +4,12 @@ This file provides guidance to AI coding agents working in this repository.
 
 ## Generelle guidelines
 
-@.guidelines/security.md
-@.guidelines/web-frontend.md
+[//]: # (@.guidelines/security.md)
+[//]: # (@.guidelines/web-frontend.md)
 @.guidelines/testing-and-docs.md
 @.guidelines/process.md
 @.guidelines/knowledge-management.md
-@.guidelines/claude-code.md
+[//]: # (@.guidelines/claude-code.md)
 
 ---
 
@@ -89,6 +89,16 @@ Skills-listen hedder `tags` (ikke `items`) — `items` kolliderer med Pythons `d
 `experience`-poster kan have to niveauer af indhold:
 - `bullets` — direkte punktliste
 - `subsections` — array af `{heading, bullets}` til jobs med flere klientopgaver
+
+### Profilbillede og IPFS
+
+`personal.photo` i `cv.toml` gemmes som et råt IPFS CID (fx `QmXyz...`). Tre steder i `app.py` oversættes CID til en brugbar URL:
+
+- **Editor-route (`/`)**: CID → `/ipfs/<cid>` så `<img>`-feltet i formularen kan vise billedet.
+- **Preview (`_preview_html`)**: samme transformation inden HTML-rendering.
+- **IPFS-proxy (`/ipfs/<cid>`)**: henter billedet fra den lokale IPFS-gateway og returnerer det til browseren.
+
+`render.py` bruger en separat `_fetch_photo_bytes`-funktion der henter billedet via gateway og indlejrer det som base64 data-URL direkte i PDF/DOCX.
 
 ### Formular-parsing i `app.py`
 

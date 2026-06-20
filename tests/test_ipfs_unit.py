@@ -9,10 +9,15 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
+from fastapi.testclient import TestClient
+from unittest.mock import patch
+
 import app as app_module
 import render as render_module
-from app import _is_cid
+from app import _is_cid, app
 from render import _is_cid as render_is_cid, _photo_data_url, _fetch_photo_bytes
+
+client = TestClient(app)
 
 
 class TestIsCid:
@@ -79,3 +84,32 @@ class TestPhotoDataUrl:
         with patch("render._fetch_photo_bytes", return_value=None):
             result = _photo_data_url("QmFake")
         assert result == ""
+
+
+class TestEditorPhotoCid:
+    FAKE_CID = "QmFakeCid123abc"
+
+    def _minimal_cv(self, photo):
+        return {
+            "lang": "da",
+            "personal": {"name": "Test", "title": "Dev", "email": "t@t.dk",
+                         "phone": "12345678", "address": "Testvej 1", "photo": photo},
+            "summary": {"text": ""},
+            "about": {"text": ""},
+            "languages": [],
+            "skills": {"tags": []},
+            "experience": [],
+            "education": [],
+        }
+
+    def test_cid_oversaettes_til_ipfs_url_i_editor(self):
+        with patch("app.load_cv", return_value=self._minimal_cv(self.FAKE_CID)):
+            resp = client.get("/", follow_redirects=True)
+        assert resp.status_code == 200
+        assert f"/ipfs/{self.FAKE_CID}" in resp.text
+
+    def test_tom_photo_viser_ingen_ipfs_url(self):
+        with patch("app.load_cv", return_value=self._minimal_cv("")):
+            resp = client.get("/", follow_redirects=True)
+        assert resp.status_code == 200
+        assert "/ipfs/" not in resp.text

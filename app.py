@@ -134,6 +134,11 @@ async def editor(request: Request, lang: str = Query("da")):
     flash = _flash
     _flash = None
     cv = load_cv(lang)
+    cv = dict(cv)
+    cv["personal"] = dict(cv.get("personal", {}))
+    photo = cv["personal"].get("photo", "")
+    if _is_cid(photo):
+        cv["personal"]["photo"] = f"/ipfs/{photo}"
     return HTMLResponse(render_template("edit.html", cv=cv, flash=flash, lang=lang))
 
 
