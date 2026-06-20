@@ -8,9 +8,7 @@ import tomli_w
 import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
-
 from fastapi.testclient import TestClient
-from unittest.mock import patch
 
 import app as app_module
 import render as render_module
