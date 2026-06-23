@@ -308,5 +308,18 @@ body {
 
 @media print {
   body { background: none; margin: 0; padding: 0; }
-  .page { box-shadow: none; }
+  .page {
+    box-shadow: none;
+    display: block;
+    min-height: 0;
+    width: auto;
+  }
+  .sidebar {
+    float: left;
+    width: 68mm;
+    min-height: 297mm;
+  }
+  .main {
+    margin-left: 68mm;
+  }
 }
