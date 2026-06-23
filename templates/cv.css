@@ -214,16 +214,8 @@ body {
 .timeline {
   position: relative;
   padding-left: 5mm;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 1.5mm;
-  top: 2mm;
-  bottom: 2mm;
-  width: 0.5px;
-  background: var(--timeline-line);
+  border-left: 0.5px solid var(--timeline-line);
+  margin-left: 1.5mm;
 }
 
 .timeline-entry {
@@ -237,7 +229,7 @@ body {
 .timeline-entry::before {
   content: '';
   position: absolute;
-  left: -3.5mm;
+  left: -5mm;
   top: 1.8mm;
   width: 2.5mm;
   height: 2.5mm;
