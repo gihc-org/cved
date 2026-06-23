@@ -36,7 +36,6 @@ body {
 /* ── Sidebar ───────────────────────────────── */
 .sidebar {
   width: 68mm;
-  min-height: 297mm;
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
   padding: 8mm 6mm;
@@ -310,5 +309,4 @@ body {
 @media print {
   body { background: none; margin: 0; padding: 0; }
   .page { box-shadow: none; }
-  .sidebar { min-height: 0; }
 }
