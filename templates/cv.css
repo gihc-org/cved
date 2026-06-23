@@ -31,7 +31,6 @@ body {
   background: var(--main-bg);
   margin: 0 auto;
   box-shadow: 0 2px 20px rgba(0,0,0,0.15);
-  overflow: hidden;
 }
 
 /* ── Sidebar ───────────────────────────────── */
@@ -232,6 +231,8 @@ body {
   position: relative;
   margin-bottom: 4mm;
   padding-left: 4mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .timeline-entry::before {
@@ -308,6 +309,6 @@ body {
 
 @media print {
   body { background: none; margin: 0; padding: 0; }
-  .page { box-shadow: none; height: 297mm; min-height: 0; overflow: hidden; }
+  .page { box-shadow: none; }
   .sidebar { min-height: 0; }
 }
