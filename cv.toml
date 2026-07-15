@@ -10,10 +10,10 @@ title = "Systemudvikler"
 email = "kristian.n.jensen@gmail.com"
 phone = "52699443"
 address = "Krudttårnsvej 121, 2791 Dragør"
-photo = "QmdENpFuHHprY5ijPB6GhtrJpMJVu8cCVuStU5zMitgu4z"
+photo = "QmTJB6Wz2tKQGBSzz1mJPHqXajCqiUzVXvcDPGK16zRg4L"
 
 [summary]
-text = "Webudvikler og systemudvikler med mere end 15 års erfaring inden for udvikling og drift af webplatforme, integrationsløsninger og cloud-infrastruktur. Jeg har en bred baggrund i full-stack webudvikling med JavaScript og Node.js og har de seneste år arbejdet intensivt med cloud-platforme på AWS og Kubernetes.\r\n\r\nJeg kender TV 2 indefra: fra 2012 til 2014 arbejdede jeg som webudvikler på tv2.dk, hvor jeg bidrog til portal-implementeringen i Drupal og stod for integrationer til bl.a. Teletext og Twitter. Den baggrund giver mig en direkte forståelse for de krav, der stilles til robusthed, oppetid og brugerkvalitet i et stort, publicistisk medie.\r\n\r\nJeg trives i tværfaglige produktteams, hvor beslutninger bygger på data, hypoteser testes i praksis og alle tager ansvar for hele produktet fra backlog til produktion. Jeg har erfaring med DevOps-praksis, CI/CD-pipelines og cloud-native løsninger og motiveres af at bygge løsninger, der er teknisk solide og skaber målbar værdi for brugerne."
+text = "Jeg arbejder med DevOps og cloud-baserede løsninger med fokus på stabil drift, sikkerhed og effektiv levering. Med solid erfaring fra AWS og Infrastructure as Code (IaC) har jeg automatiseret og standardiseret infrastruktur for at reducere time-to-market og understøtte agile arbejdsmetoder. Jeg har arbejdet med monitorering, adgangsstyring og drift i miljøer med høje krav til compliance og informationssikkerhed. Samtidig har jeg fokus på at omsætte min cloud-erfaring til Azure-baserede platforme. Jeg motiveres af at skabe løsninger, der forbedrer brugeroplevelsen og styrker IT som en integreret del af forretningen."
 
 [about]
 text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
@@ -52,8 +52,6 @@ tags = [
     "SonarQube",
     "terraform",
     "Typo3",
-    "VMware",
-    "jQuery",
 ]
 
 [[experience]]

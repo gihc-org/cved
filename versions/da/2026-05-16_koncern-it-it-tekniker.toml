@@ -13,7 +13,7 @@ title = "Systemudvikler"
 email = "kristian.n.jensen@gmail.com"
 phone = "52699443"
 address = "Krudttårnsvej 121, 2791 Dragør"
-photo = "static/photo_9fa0830d.jpg"
+photo = "QmTJB6Wz2tKQGBSzz1mJPHqXajCqiUzVXvcDPGK16zRg4L"
 
 [summary]
 text = "Jeg arbejder med drift, udvikling og automatisering af infrastrukturløsninger med fokus på stabile platforme, Linux-baserede servermiljøer og effektive driftsprocesser. Gennem flere år har jeg arbejdet med både on-prem og cloud-baserede miljøer, hvor jeg blandt andet har arbejdet med Infrastructure as Code (IaC), CI/CD, virtualisering og deployment af shared services.\r\n\r\nJeg har erfaring med drift og automatisering i miljøer med høje krav til stabilitet, sikkerhed og standardisering og motiveres af at skabe løsninger, der gør drift mere robust og hverdagen lettere for både brugere og kolleger. Samtidig lægger jeg stor vægt på samarbejde, vidensdeling og ansvarlighed og har blandt andet fungeret som mentor for nyansatte og studentermedhjælpere.\r\n\r\nTeknisk har jeg primært arbejdet med Linux, AWS, Terraform, Jenkins, Docker og automatisering, men jeg trives generelt i komplekse infrastrukturlandskaber og sætter mig hurtigt ind i nye teknologier og platforme."
