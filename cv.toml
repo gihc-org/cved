@@ -13,7 +13,7 @@ address = "Krudttårnsvej 121, 2791 Dragør"
 photo = "QmTJB6Wz2tKQGBSzz1mJPHqXajCqiUzVXvcDPGK16zRg4L"
 
 [summary]
-text = "Tidligere chefkonsulent i Udviklings- og Forenklingsstyrelsen (2015–2020), hvor jeg drev migreringen af shared services som Jenkins og SonarQube fra on-prem til AWS og videre til Kubernetes (EKS). Siden har jeg fortsat med Jenkins, JCasC og container-drift hos bl.a. JYSK og Cybercom/KnowIT — og søger nu tilbage til netop den type JaaS-platform, jeg selv var med til at bygge."
+text = "Tidligere chefkonsulent i Udviklings- og Forenklingsstyrelsen (2015–2020), hvor jeg som del af ejendomsvurderingsprojektet drev migreringen af Jenkins-infrastruktur fra on-prem til AWS og videre til Kubernetes (EKS). Siden har jeg fortsat med Jenkins, JCasC og container-drift hos bl.a. JYSK og Cybercom/KnowIT."
 
 [about]
 text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
