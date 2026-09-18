@@ -1,0 +1,244 @@
+lang = "da"
+languages = [
+    { name = "Dansk", level = 4 },
+    { name = "Engelsk", level = 3 },
+]
+_job = "AI-udvikler"
+_note = ""
+_application = "Kære Lars Vraa\r\n\r\nJeg søger stillingen som AI-udvikler hos KOMBIT, fordi jeg ser en spændende mulighed for at kombinere mine mange års erfaring med softwareudvikling, DevOps og cloud-teknologier med den udvikling, der sker inden for generativ AI. Jeg motiveres af at bygge løsninger, der skaber reel værdi, og jeg finder det særligt inspirerende, at KOMBIT arbejder med ansvarlige og sikre AI-løsninger til gavn for kommunerne.\r\n\r\nJeg har omkring 20 års erfaring med softwareudvikling og de seneste godt seks år arbejdet med DevOps og cloud-platforme. Gennem min karriere har jeg udviklet løsninger i blandt andet Java, JavaScript, PHP, Python og C#, samtidig med at jeg har arbejdet intensivt med Linux, Kubernetes, AWS, Terraform, Ansible og CI/CD. Jeg er AWS Certified Solutions Architect – Associate og har stor erfaring med at automatisere deployment, etablere stabile udviklingsplatforme og sikre drift af komplekse it-løsninger.\r\n\r\nJeg har været fastansat i Udviklings- og Forenklingsstyrelsen og har derudover arbejdet med store it-løsninger hos blandt andet COOP, Jysk og Ørsted. Her har jeg været med til at udvikle og drifte samfundskritiske løsninger, etablere Kubernetes-platforme, bygge CI/CD-pipelines og automatisere infrastruktur gennem Infrastructure as Code. Det har givet mig et solidt fundament i at udvikle løsninger, der både er robuste, skalerbare og kan bringes sikkert i produktion.\r\n\r\nDet, der særligt tiltrækker mig ved denne stilling, er muligheden for at arbejde med AI som en integreret del af softwareudviklingen. Jeg følger udviklingen inden for generativ AI tæt og anvender allerede AI-værktøjer aktivt i mit daglige udviklingsarbejde til analyse, design, kodning, test og dokumentation. Blandt andet har jeg opbygget et Git pre-commit hook, som automatisk sender ændringerne (diffen) til Claude sammen med et sæt udviklingsretningslinjer. På den måde får jeg valideret, at krav til dokumentation, test og kodekvalitet er opfyldt, inden ændringerne committes. Jeg ser AI som en samarbejdspartner, der kan være med til at hæve kvaliteten og understøtte en mere effektiv udviklingsproces – uden at gå på kompromis med faglighed eller ansvarlighed.\r\n\r\nJeg trives i tværfaglige miljøer, hvor udviklere, arkitekter og forretningen arbejder tæt sammen om at skabe værdi. Samtidig sætter jeg pris på en kultur med høj faglighed, videndeling og løbende læring – noget jeg oplever kendetegner KOMBITs AI-satsning.\r\n\r\nEfter en periode væk fra arbejdsmarkedet er jeg nu klar til at vende tilbage med fornyet energi og stor motivation. Perioden har givet mig nye perspektiver, og jeg ser frem til igen at bidrage med min tekniske erfaring, nysgerrighed og lyst til at lære nyt. Jeg er overbevist om, at min kombination af softwareudvikling, DevOps og praktisk anvendelse af AI vil gøre mig til en værdifuld del af jeres AI core team.\r\n\r\nJeg ser frem til muligheden for at uddybe min motivation og fortælle mere om, hvordan jeg kan bidrage til KOMBITs udvikling af ansvarlige og produktionsklare AI-løsninger.\r\n\r\nMed venlig hilsen\r\n\r\nKristian Jensen"
+
+[personal]
+name = "Kristian Nygaard Jensen"
+title = "Softwareudvikler | DevOps | AI"
+email = "kristian.n.jensen@gmail.com"
+phone = "52699443"
+address = "Krudttårnsvej 121, 2791 Dragør"
+photo = "QmdENpFuHHprY5ijPB6GhtrJpMJVu8cCVuStU5zMitgu4z"
+
+[summary]
+text = "Softwareudvikler med omkring 20 års erfaring inden for udvikling af forretningskritiske systemer og de seneste godt seks år med speciale i DevOps, cloud og platforme. Jeg har stor erfaring med Linux, Kubernetes, AWS, Terraform og CI/CD samt med at udvikle løsninger, der er robuste, automatiserede og klar til produktion. Jeg arbejder aktivt med generativ AI som en del af udviklingsprocessen og har blandt andet automatiseret kvalitetssikring gennem Git pre-commit hooks, hvor AI validerer kodeændringer mod krav til dokumentation, test og kodekvalitet. Jeg motiveres af at omsætte ny teknologi til praktiske løsninger, der skaber værdi for både brugere og forretning."
+
+[about]
+text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
+
+[skills]
+tags = [
+    "Ansible",
+    "Artifactory",
+    "aws cloud",
+    "Azure DevOps",
+    "Bash",
+    "CentOS",
+    "Cerebro",
+    "Clojure",
+    "ClojureScript",
+    "Delphi",
+    "Docker",
+    "Drupal",
+    "fluentd",
+    "gocd",
+    "go test",
+    "HTML + CSS",
+    "JavaScript",
+    "Jenkins",
+    "Kibana",
+    "kubernetes",
+    "Marathon",
+    "Mesos",
+    "MSSQL",
+    "MySQL",
+    "NodeJS",
+    "PHP",
+    "PostgreSQL",
+    "rancher",
+    "SOAP",
+    "SonarQube",
+    "terraform",
+    "Typo3",
+    "VMware",
+    "jQuery",
+]
+
+[[experience]]
+company = "JYSK A/S"
+duration = "5 måneder"
+title = "DevOps"
+period = "feb. 2023 – jun. 2023"
+type = "Konsulent"
+bullets = [
+    "Implementering af pipelines i Jenkins",
+    "Vedligeholdelse af Jenkins",
+    "Vedligeholdelse af virtuelle maskiner",
+    "Vedligeholde AWX projekter",
+    "Opbygning af docker images",
+]
+
+[[experience]]
+company = "0071"
+duration = "9 måneder"
+title = "Software Developer"
+period = "maj 2022 – jan. 2023"
+description = "Implementering af publiseringsplatform (Zero Status)."
+bullets = [
+    "Applikation udviklet i Node.js",
+    "Dokumenter gemt på IPFS",
+]
+
+[[experience]]
+company = "Cybercom"
+duration = "1 år, 7 måneder"
+title = "DevOps Engineer"
+period = "okt. 2020 – apr. 2022"
+description = "Infrastrukture R&D. Deployment via CDK og terraform."
+
+[[experience.subsections]]
+heading = "Konsulent hos COOP via Cybercom/KnowIT"
+bullets = [
+    "Implementerede logging-infrastruktur",
+    "Rancher",
+    "Cerebro, Elasticsearch / Kibana, Fluentd",
+    "Terraform",
+    "Opbygning af docker images",
+]
+
+[[experience.subsections]]
+heading = "Konsulent hos Ørsted via Cybercom/KnowIT"
+bullets = [
+    "Implementerede virtuelle ressourcer på Azure platformen",
+    "Deployment af applikationer via Azure DevOps",
+    "Planlægning af udruldning af kubernetes (AKS)",
+]
+
+[[experience]]
+company = "Udviklings- og Forenklingsstyrelsen"
+duration = "5 år, 1 måned"
+title = "Chefkonsulent"
+period = "aug. 2015 – aug. 2020"
+
+[[experience.subsections]]
+heading = "Fase 1: On-Prem"
+bullets = [
+    "IaC deployment af on-prem cloud bygget på Mesos/Marathon ved brug af Ansible",
+    "Udvikling og vedligeholdelse af Linux-baserede servere (Ubuntu)",
+    "Opbygning af docker images",
+    "Automatisering af processer og deployment pipelines i Jenkins og GoCD",
+    "Import af BBR data til DataStax Graph (DSG)",
+    "Medvirkede til tekniskafsnit af offentligt cloud udbud",
+    "Implementeret brugergrænseflade komponenter i ClojureScript/Reagent",
+]
+
+[[experience.subsections]]
+heading = "Fase 2: AWS"
+bullets = [
+    "IaC deployment af shared services (Jenkins, SonarQube, AD spejl) på AWS via Terraform",
+    "Udvikling og vedligeholdelse af Linux-baserede servere (EC2, CentOS)",
+    "Implementering af firewall-regler herunder securitygroups",
+    "Implementering af dokumentkø bygget på SQS, SNS og serverless funktioner",
+    "Automatisering af processer og deployment pipelines i Jenkins",
+    "Opbygning af docker images",
+]
+
+[[experience.subsections]]
+heading = "Fase 3: Kubernetes"
+bullets = [
+    "IaC deployment af shared services (Jenkins, SonarQube, AD spejl) på Kubernetes (EKS) via Terraform",
+    "Automatisering af processer og deployment pipelines i Jenkins",
+    "Opbygning af docker images",
+    "GitOps pipelines i Atlantis",
+]
+
+[[experience]]
+company = "YouSee A/S"
+duration = "1 år, 1 måned"
+title = "Systemudvikler/Programmør"
+period = "aug. 2014 – aug. 2015"
+bullets = [
+    "Produktkatalog med integration til salgsplatform",
+    "Opbygning af docker images",
+    "Performancetest",
+]
+
+[[experience]]
+company = "TV2 Danmark"
+duration = "2 år, 8 måneder"
+title = "Webudvikler"
+period = "jan. 2012 – aug. 2014"
+description = "Implementering af portal i Drupal."
+bullets = [
+    "Integration til Teletext",
+    "Integration til Twitter",
+    "Breakingbar",
+]
+
+[[experience]]
+company = "MOC Systems"
+duration = "3 år, 10 måneder"
+title = "Webudvikler"
+period = "jan. 2008 – okt. 2011"
+description = "Implementering af hjemmesider i TYPO3."
+bullets = [
+    "SMK",
+    "Venstre",
+    "Red barnet",
+]
+
+[[experience]]
+company = "Topdanmark"
+duration = "2 år, 1 måned"
+title = "Webudvikler"
+period = "jan. 2006 – jan. 2008"
+bullets = [
+    "Egenudviklet MVC-system mellem TYPO3 og salgsplatform",
+]
+
+[[experience]]
+company = "WebmindIT"
+duration = "1 år, 1 måned"
+title = "Webudvikler"
+period = "jan. 2005 – jan. 2006"
+description = "Salgsplatform til aviser BT."
+bullets = [
+    "Interface i XULRunner",
+    "Plugin til XULRunner med integration til TAPICOM",
+    "Administrationsmodul",
+]
+
+[[experience]]
+company = "AK Techotel"
+duration = "1 år"
+title = "Systemudvikler"
+period = "jan. 2004 – dec. 2004"
+bullets = [
+    "Statistik modul til Picasso hotel CRM system",
+    "Xquery interface til eniro",
+    "SOAP interface til hospital patient hotel",
+]
+
+[[education]]
+institution = "Pearson"
+duration = "1 år, 1 måned"
+degree = "AWS Certified Solutions Architect – Associate"
+period = "2020 – jan. 2021"
+bullets = [
+    "Earners of this certification have a comprehensive understanding of AWS services and technologies.",
+]
+
+[[education]]
+institution = "RUC"
+duration = "3 år, 11 måneder"
+degree = "Bachelor of Computer Science"
+period = "aug. 2002 – jun. 2006"
+bullets = [
+    "Linear algebra",
+    "Skrev et spil i Java",
+]
+
+[[education]]
+institution = "Niels Brock"
+duration = "2 år, 5 måneder"
+degree = "Datamatiker"
+period = "jan. 2000 – maj 2002"
+bullets = [
+    "Skrev et fordelingssystem til DHL-Stafetten",
+    "Placering af grupper i telte",
+]
