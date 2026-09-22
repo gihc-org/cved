@@ -6,7 +6,7 @@ languages = [
 
 [personal]
 name = "Kristian Nygaard Jensen"
-title = "Systemudvikler"
+title = "DevOps"
 email = "kristian.n.jensen@gmail.com"
 phone = "52699443"
 address = "Krudttårnsvej 121, 2791 Dragør"
@@ -52,6 +52,8 @@ tags = [
     "SonarQube",
     "terraform",
     "Typo3",
+    "Groovy",
+    "JCasC",
 ]
 
 [[experience]]
