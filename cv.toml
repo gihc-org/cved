@@ -13,7 +13,7 @@ address = "Krudttårnsvej 121, 2791 Dragør"
 photo = "QmTJB6Wz2tKQGBSzz1mJPHqXajCqiUzVXvcDPGK16zRg4L"
 
 [summary]
-text = "Tidligere chefkonsulent i Udviklings- og Forenklingsstyrelsen (2015–2020), hvor jeg som del af ejendomsvurderingsprojektet drev migreringen af Jenkins-infrastruktur fra on-prem til AWS og videre til Kubernetes (EKS). Siden har jeg fortsat med Jenkins, JCasC og container-drift hos bl.a. JYSK og Cybercom/KnowIT."
+text = "Jeg arbejder med DevOps og cloud-baserede løsninger med fokus på stabil drift, sikkerhed og effektiv levering. Med solid erfaring fra AWS og Infrastructure as Code (IaC) har jeg automatiseret og standardiseret infrastruktur for at reducere time-to-market og understøtte agile arbejdsmetoder. Jeg har arbejdet med monitorering, adgangsstyring og drift i miljøer med høje krav til compliance og informationssikkerhed. Samtidig har jeg fokus på at omsætte min cloud-erfaring til Azure-baserede platforme. Jeg motiveres af at skabe løsninger, der forbedrer brugeroplevelsen og styrker IT som en integreret del af forretningen."
 
 [about]
 text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
@@ -54,6 +54,19 @@ tags = [
     "Typo3",
     "Groovy",
     "JCasC",
+]
+
+[[experience]]
+company = "GIHC"
+duration = "6 måneder"
+title = "DevOps"
+period = "apr. 2026 - nu"
+description = "Infrastruktur og service deployment"
+bullets = [
+    "Opsætning af Kubernetes cluser via IaC Ansible/Terraform",
+    "Deployment af service til DM og virtuelle møder",
+    "Deployment af Jenkins via JCasC",
+    "Opsætning af Jenkins pipelines",
 ]
 
 [[experience]]
