@@ -44,3 +44,11 @@
   - [x] Proxy-endpoint `/ipfs/<cid>` i app.py der henter fra lokal gateway (port 8080)
   - [x] Rendering: brug proxy-URL i HTML-template og WeasyPrint, download bytes til DOCX
   - [x] Fjern lagring af billeder i `static/` og git
+
+- [x] **"+ Tilføj job" i toppen af Joberfaring + nye jobs øverst**
+
+  Mål: nyeste jobrolle skal havne øverst i `cv.toml` uden manuel flytning bagefter.
+
+  - [x] Flyt "+ Tilføj job"-knappen op ved overskriften i Joberfaring-kortet
+  - [x] `addExperience()` indsætter nyt jobkort øverst i `#exp-list` i stedet for nederst
+  - [x] Ny test der verificerer at et nyt job gemmes som første post i `experience`

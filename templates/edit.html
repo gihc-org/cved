@@ -74,6 +74,8 @@
       margin-bottom: 24px;
     }
     .card h2 { margin: 0 0 18px; font-size: 16px; color: var(--accent); }
+    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .card-head h2 { margin: 0; }
 
     /* Form */
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
@@ -330,7 +332,10 @@
 
       <!-- Experience -->
       <div class="card" id="experience">
-        <h2>Joberfaring</h2>
+        <div class="card-head">
+          <h2>Joberfaring</h2>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addExperience()">+ Tilføj job</button>
+        </div>
         <div id="exp-list">
           {% for job in cv.experience %}
           <div class="entry-card">
@@ -417,7 +422,6 @@
           </div>
           {% endfor %}
         </div>
-        <button type="button" class="btn btn-outline" onclick="addExperience()">+ Tilføj job</button>
       </div>
 
       <!-- Education -->
@@ -780,7 +784,11 @@ function addExperience() {
       <button type="button" class="btn btn-outline btn-sm" style="margin-top:8px" onclick="addSubsection(this)">+ Underafsnit</button>
     </div>
   `;
-  document.getElementById('exp-list').appendChild(card);
+  // Nyt job øverst: parsingen af formularen følger felt-rækkefølgen, så det
+  // nyeste job bliver første post i cv.toml uden manuel flytning bagefter.
+  document.getElementById('exp-list').prepend(card);
+  const companyInput = card.querySelector('input[name="exp_company"]');
+  if (companyInput) companyInput.focus();
 }
 
 function addEducation() {

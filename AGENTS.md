@@ -104,6 +104,8 @@ Skills-listen hedder `tags` (ikke `items`) — `items` kolliderer med Pythons `d
 
 HTML-formularen bruger gentagne felter med samme `name` (fx mange `exp_company`-inputs). Parsing sker ved at gennemløbe `form.multi_items()` i orden — `exp_company` fungerer som separator der starter en ny job-post. Samme mønster gælder `edu_institution` for uddannelse. Rækkefølgen af form-felter er derfor afgørende for korrekt parsing.
 
+Konsekvens: "+ Tilføj job" indsætter det nye jobkort **øverst** i `#exp-list` (via `prepend`), så nyeste job automatisk bliver første post i `experience` i `cv.toml` — uden at backend kender til sortering.
+
 ### Browser-preview vs. PDF-rendering
 
 `templates/cv.css` er master-stylesheet. Til browser-preview (`/preview`) kopieres filen til `static/cv.css` og template renderes med `css_url="/static/cv.css"`. Til PDF-rendering læser WeasyPrint filen direkte fra `templates/cv.css` via absolut sti.
