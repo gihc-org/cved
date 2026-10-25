@@ -13,7 +13,7 @@ address = "Krudttårnsvej 121, 2791 Dragør"
 photo = "QmTJB6Wz2tKQGBSzz1mJPHqXajCqiUzVXvcDPGK16zRg4L"
 
 [summary]
-text = "Jeg arbejder med DevOps og cloud-baserede løsninger med fokus på stabil drift, sikkerhed og effektiv levering. Med solid erfaring fra AWS og Infrastructure as Code (IaC) har jeg automatiseret og standardiseret infrastruktur for at reducere time-to-market og understøtte agile arbejdsmetoder. Jeg har arbejdet med monitorering, adgangsstyring og drift i miljøer med høje krav til compliance og informationssikkerhed. Samtidig har jeg fokus på at omsætte min cloud-erfaring til Azure-baserede platforme. Jeg motiveres af at skabe løsninger, der forbedrer brugeroplevelsen og styrker IT som en integreret del af forretningen."
+text = "Jeg arbejder med DevOps og platformsdrift med fokus på automatisering, stabil drift og sikkerhed. Jeg har bygget og fulgt den samme platform hele vejen — fra en on-prem cloud på VMware og Mesos/Marathon udrullet med Ansible, over AWS med Terraform, til Kubernetes — altid med Infrastructure as Code som omdrejningspunkt. Mit fokus er at give udviklingsteams selvbetjening, de kan bruge uden at vente på nogen, og som samtidig kan overvåges, adgangsstyres og driftes i miljøer med høje krav til compliance og informationssikkerhed. Jeg motiveres af at lære nye platforme at kende ved at bygge med dem."
 
 [about]
 text = "Jeg er en god kollega, der både på mindre og større arbejdspladser og projekter sætter en ære i at bidrage med godt humør og tage ansvar for, at alle kommer med, selvom der skal løbes stærkt. Min fritid går med mine børn og friluftsliv - meget gerne kombineret."
@@ -47,11 +47,13 @@ tags = [
     "NodeJS",
     "PHP",
     "PostgreSQL",
+    "PXE/TFTP",
     "rancher",
     "SOAP",
     "SonarQube",
     "terraform",
     "Typo3",
+    "VMware",
     "Groovy",
     "JCasC",
 ]
@@ -64,9 +66,10 @@ period = "apr. 2026 - nu"
 description = "Infrastruktur og service deployment"
 bullets = [
     "Opsætning af Kubernetes cluser via IaC Ansible/Terraform",
-    "Deployment af service til DM og virtuelle møder",
-    "Deployment af Jenkins via JCasC",
+    "Deployment af Jenkins via JCasC og Helm-charts",
     "Opsætning af Jenkins pipelines",
+    "Deployment af service til DM og virtuelle møder",
+    "Deployment af RSS-feed",
 ]
 
 [[experience]]
@@ -129,6 +132,8 @@ period = "aug. 2015 – aug. 2020"
 heading = "Fase 1: On-Prem"
 bullets = [
     "IaC deployment af on-prem cloud bygget på Mesos/Marathon ved brug af Ansible",
+    "Oprettelse og drift af VM'er på VMware-baseret on-prem infrastruktur",
+    "Opsatte PXE/TFTP-server til netværksinstallation af Ubuntu – afløste manuel OS-installation",
     "Udvikling og vedligeholdelse af Linux-baserede servere (Ubuntu)",
     "Opbygning af docker images",
     "Automatisering af processer og deployment pipelines i Jenkins og GoCD",
